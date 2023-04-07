@@ -20,14 +20,14 @@ function App() {
             <div key={field.id} className="w-full">
               <label htmlFor={`field-${field.id}`}>{field.label}</label>
               <input
-                className="border border-purple-400 rounded-lg p-2 mr-2 w-full outline-purple-600"
+                className="border border-blue-400 rounded-lg p-2 mr-2 w-full outline-blue-600"
                 id={`field-${field.id}`}
                 type={field.type}
               />
             </div>
           ))}
           <button
-            className="hover:bg-purple-400 py-2 rounded-lg mt-2 hover:text-white border font-bold transition-all border-purple-400 text-purple-400"
+            className="hover:bg-blue-400 py-2 rounded-lg mt-2 hover:text-white border font-bold transition-all border-blue-400 text-blue-400"
             type="submit"
           >
             Submit
