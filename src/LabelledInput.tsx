@@ -7,8 +7,8 @@ export function LabelledInput(props: {
   icon: JSX.Element;
   type: string;
   placeholder: string;
-  updateValueCB: (id: number, value: any) => void;
-  value: any;
+  updateValueCB: (id: number, value: string) => void;
+  value: string;
   removeFieldCB: (id: number) => void;
 }) {
   return (

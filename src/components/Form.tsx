@@ -90,13 +90,13 @@ export function Form(props: { closeFormCB: () => void }) {
     );
   };
 
-  const updateValue = (id: number, value: any) => {
+  const updateValue = (id: number, value: string) => {
     setFieldState(
       fieldState.map((field) => {
         if (id === field.id) {
           return {
             ...field,
-            value: "",
+            value: value,
           };
         }
         return field;
