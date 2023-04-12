@@ -4,7 +4,6 @@ import { DeleteIcon } from "./AppIcons";
 export function LabelledInput(props: {
   id: number;
   label: string;
-  icon: string;
   type: string;
   placeholder: string;
   updateValueCB: (id: number, value: string) => void;
@@ -20,9 +19,6 @@ export function LabelledInput(props: {
         {props.label}
       </label>
       <div className="flex">
-        <span className="inline-flex font-semibold items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-600 text-gray-400 border-gray-600">
-          {props.icon}
-        </span>
         <input
           type={props.type}
           id={`field-${props.id}`}
@@ -30,7 +26,7 @@ export function LabelledInput(props: {
           onChange={(event) =>
             props.updateValueCB(props.id, event.target.value)
           }
-          className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+          className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-700 rounded-l-md border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
           placeholder={props.placeholder}
         />
         <button

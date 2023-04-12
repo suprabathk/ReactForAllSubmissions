@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FieldIcon, PlusIcon } from "../AppIcons";
 import { LabelledInput } from "../LabelledInput";
+
+interface formData {
+  id: number;
+  title: string;
+  formFields: formField[];
+}
 
 interface formField {
   id: number;
   label: string;
   type: string;
   placeholder: string;
-  // icon: JSX.Element;
-  //Temporarily Using String as icon because Local Storage cannot store JSX components
-  icon: string;
   value: string;
 }
 
@@ -19,8 +22,6 @@ const initialFormFields: formField[] = [
     label: "First Name",
     type: "text",
     placeholder: "John",
-    // icon: <PersonIcon className={"w-5 h-5"} />,
-    icon: "FN",
     value: "",
   },
   {
@@ -28,8 +29,6 @@ const initialFormFields: formField[] = [
     label: "Last Name",
     type: "text",
     placeholder: "Doe",
-    // icon: <PersonIcon className={"w-5 h-5"} />,
-    icon: "LN",
     value: "",
   },
   {
@@ -37,8 +36,6 @@ const initialFormFields: formField[] = [
     label: "Email",
     type: "text",
     placeholder: "johndoe@company.com",
-    // icon: <EmailIcon className={"w-5 h-5"} />,
-    icon: "@",
     value: "",
   },
   {
@@ -46,8 +43,6 @@ const initialFormFields: formField[] = [
     label: "Date of birth",
     type: "date",
     placeholder: "01-01-2000",
-    // icon: <CalendarIcon className={"w-5 h-5"} />,
-    icon: "DOB",
     value: "",
   },
   {
@@ -55,27 +50,49 @@ const initialFormFields: formField[] = [
     label: "Phone number",
     type: "tel",
     placeholder: "1234567890",
-    // icon: <PhoneIcon className={"w-5 h-5"} />,
-    icon: "PH",
     value: "",
   },
 ];
 
-const saveFormData = (currentState: formField[]) => {
-  localStorage.setItem("formFields", JSON.stringify(currentState));
+const saveLocalForms = (localForms: formData[]) => {
+  localStorage.setItem("savedForms", JSON.stringify(localForms));
 };
 
-const getInitialFormData: () => formField[] = () => {
-  const formFieldsJSON = localStorage.getItem("formFields");
-  const persistantFormFields = formFieldsJSON
-    ? JSON.parse(formFieldsJSON)
-    : initialFormFields;
-  return persistantFormFields;
+const saveFormData = (currentState: formData) => {
+  const localForms = getLocalForms();
+  const updatedLocalForms = localForms.map((form) =>
+    form.id === currentState.id ? currentState : form
+  );
+  saveLocalForms(updatedLocalForms);
+};
+
+const getLocalForms: () => formData[] = () => {
+  const savedFormsJSON = localStorage.getItem("savedForms");
+  return savedFormsJSON ? JSON.parse(savedFormsJSON) : [];
+};
+
+const getInitialFormData: () => formData = () => {
+  const localForms = getLocalForms();
+  if (localForms.length > 0) {
+    return localForms[0];
+  }
+  const newForm = {
+    id: Number(new Date()),
+    title: "Untitled Form",
+    formFields: initialFormFields,
+  };
+  saveLocalForms([...localForms, newForm]);
+  return newForm;
 };
 
 export function Form(props: { closeFormCB: () => void }) {
-  const [fieldState, setFieldState] = useState(getInitialFormData());
+  const [fieldState, setFieldState] = useState(() => getInitialFormData());
   const [newLabel, setNewLabel] = useState("");
+  const titleRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    titleRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     let timeout = setTimeout(() => {
@@ -88,37 +105,45 @@ export function Form(props: { closeFormCB: () => void }) {
   }, [fieldState]);
 
   const addField = () => {
-    setFieldState([
+    setFieldState({
       ...fieldState,
-      {
-        id: Number(new Date()),
-        label: newLabel,
-        type: "text",
-        placeholder: newLabel,
-        icon: newLabel !== "" ? newLabel[0].toUpperCase() : "A",
-        value: "",
-      },
-    ]);
+      formFields: [
+        ...fieldState.formFields,
+        {
+          id: Number(new Date()),
+          label: newLabel,
+          type: "text",
+          placeholder: newLabel,
+          value: "",
+        },
+      ],
+    });
+    setNewLabel("");
   };
 
   const removeField = (id: number) => {
-    setFieldState(fieldState.filter((field) => field.id !== id));
+    setFieldState({
+      ...fieldState,
+      formFields: fieldState.formFields.filter((field) => field.id !== id),
+    });
   };
 
   const clearForm = () => {
-    setFieldState(
-      fieldState.map((field) => {
+    setFieldState({
+      ...fieldState,
+      formFields: fieldState.formFields.map((field) => {
         return {
           ...field,
           value: "",
         };
-      })
-    );
+      }),
+    });
   };
 
   const updateValue = (id: number, value: string) => {
-    setFieldState(
-      fieldState.map((field) => {
+    setFieldState({
+      ...fieldState,
+      formFields: fieldState.formFields.map((field) => {
         if (id === field.id) {
           return {
             ...field,
@@ -126,19 +151,35 @@ export function Form(props: { closeFormCB: () => void }) {
           };
         }
         return field;
-      })
-    );
+      }),
+    });
   };
 
   return (
     <div className="flex flex-col gap-4 divide-y">
       <div className="flex flex-col gap-2">
-        {fieldState.map((field) => (
+        <div className="flex">
+          <span className="inline-flex items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-600 text-gray-400 border-gray-600">
+            Title
+          </span>
+          <input
+            type="text"
+            id="form-title"
+            ref={titleRef}
+            value={fieldState.title}
+            onChange={(event) =>
+              setFieldState({ ...fieldState, title: event.target.value })
+            }
+            className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 rounded-r-md bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Form title"
+          />
+        </div>
+
+        {fieldState.formFields.map((field) => (
           <LabelledInput
             key={field.id}
             id={field.id}
             label={field.label}
-            icon={field.icon}
             type={field.type}
             value={field.value}
             updateValueCB={updateValue}
