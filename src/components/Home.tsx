@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "../logo.svg";
 
-export function Home(props: { openFormCB: () => void }) {
+export function Home(props: { openFormsListCB: () => void }) {
   return (
     <div className="flex flex-col justify-center">
       <div className="flex text-white">
@@ -12,9 +12,9 @@ export function Home(props: { openFormCB: () => void }) {
       </div>
       <button
         className="bg-gray-700 py-2 rounded-lg mt-3 hover:text-white hover:border-white border font-semibold transition-all border-gray-400 text-gray-400"
-        onClick={props.openFormCB}
+        onClick={props.openFormsListCB}
       >
-        Open Form
+        View Forms
       </button>
     </div>
   );

@@ -1,20 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FieldIcon, PlusIcon } from "../AppIcons";
 import { LabelledInput } from "../LabelledInput";
-
-interface formData {
-  id: number;
-  title: string;
-  formFields: formField[];
-}
-
-interface formField {
-  id: number;
-  label: string;
-  type: string;
-  placeholder: string;
-  value: string;
-}
+import { formData, formField } from "../types";
 
 const initialFormFields: formField[] = [
   {
@@ -71,13 +58,17 @@ const getLocalForms: () => formData[] = () => {
   return savedFormsJSON ? JSON.parse(savedFormsJSON) : [];
 };
 
-const getInitialFormData: () => formData = () => {
+const getInitialFormData: (id: number) => formData = (id) => {
   const localForms = getLocalForms();
   if (localForms.length > 0) {
-    return localForms[0];
+    for (let form of localForms) {
+      if (form.id === id) {
+        return form;
+      }
+    }
   }
   const newForm = {
-    id: Number(new Date()),
+    id: id,
     title: "Untitled Form",
     formFields: initialFormFields,
   };
@@ -85,8 +76,10 @@ const getInitialFormData: () => formData = () => {
   return newForm;
 };
 
-export function Form(props: { closeFormCB: () => void }) {
-  const [fieldState, setFieldState] = useState(() => getInitialFormData());
+export function Form(props: { id: number; openHomeCB: () => void }) {
+  const [fieldState, setFieldState] = useState(() =>
+    getInitialFormData(props.id)
+  );
   const [newLabel, setNewLabel] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
 
@@ -231,7 +224,7 @@ export function Form(props: { closeFormCB: () => void }) {
         </button>
         <button
           className="bg-gray-700 py-2 w-full rounded-lg mt-3 hover:text-white hover:border-white border font-semibold transition-all border-gray-400 text-gray-400"
-          onClick={props.closeFormCB}
+          onClick={props.openHomeCB}
         >
           Close Form
         </button>
