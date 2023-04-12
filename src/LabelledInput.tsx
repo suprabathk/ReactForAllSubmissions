@@ -4,7 +4,7 @@ import { DeleteIcon } from "./AppIcons";
 export function LabelledInput(props: {
   id: number;
   label: string;
-  icon: JSX.Element;
+  icon: string;
   type: string;
   placeholder: string;
   updateValueCB: (id: number, value: string) => void;
@@ -20,7 +20,7 @@ export function LabelledInput(props: {
         {props.label}
       </label>
       <div className="flex">
-        <span className="inline-flex items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-600 text-gray-400 border-gray-600">
+        <span className="inline-flex font-semibold items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-600 text-gray-400 border-gray-600">
           {props.icon}
         </span>
         <input

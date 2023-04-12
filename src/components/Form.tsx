@@ -1,21 +1,26 @@
-import React, { useState } from "react";
-import {
-  CalendarIcon,
-  EmailIcon,
-  FieldIcon,
-  PersonIcon,
-  PhoneIcon,
-  PlusIcon,
-} from "../AppIcons";
+import React, { useEffect, useState } from "react";
+import { FieldIcon, PlusIcon } from "../AppIcons";
 import { LabelledInput } from "../LabelledInput";
 
-const formFields = [
+interface formField {
+  id: number;
+  label: string;
+  type: string;
+  placeholder: string;
+  // icon: JSX.Element;
+  //Temporarily Using String as icon because Local Storage cannot store JSX components
+  icon: string;
+  value: string;
+}
+
+const initialFormFields: formField[] = [
   {
     id: 1,
     label: "First Name",
     type: "text",
     placeholder: "John",
-    icon: <PersonIcon className={"w-5 h-5"} />,
+    // icon: <PersonIcon className={"w-5 h-5"} />,
+    icon: "FN",
     value: "",
   },
   {
@@ -23,7 +28,8 @@ const formFields = [
     label: "Last Name",
     type: "text",
     placeholder: "Doe",
-    icon: <PersonIcon className={"w-5 h-5"} />,
+    // icon: <PersonIcon className={"w-5 h-5"} />,
+    icon: "LN",
     value: "",
   },
   {
@@ -31,7 +37,8 @@ const formFields = [
     label: "Email",
     type: "text",
     placeholder: "johndoe@company.com",
-    icon: <EmailIcon className={"w-5 h-5"} />,
+    // icon: <EmailIcon className={"w-5 h-5"} />,
+    icon: "@",
     value: "",
   },
   {
@@ -39,7 +46,8 @@ const formFields = [
     label: "Date of birth",
     type: "date",
     placeholder: "01-01-2000",
-    icon: <CalendarIcon className={"w-5 h-5"} />,
+    // icon: <CalendarIcon className={"w-5 h-5"} />,
+    icon: "DOB",
     value: "",
   },
   {
@@ -47,14 +55,37 @@ const formFields = [
     label: "Phone number",
     type: "tel",
     placeholder: "1234567890",
-    icon: <PhoneIcon className={"w-5 h-5"} />,
+    // icon: <PhoneIcon className={"w-5 h-5"} />,
+    icon: "PH",
     value: "",
   },
 ];
 
+const saveFormData = (currentState: formField[]) => {
+  localStorage.setItem("formFields", JSON.stringify(currentState));
+};
+
+const getInitialFormData: () => formField[] = () => {
+  const formFieldsJSON = localStorage.getItem("formFields");
+  const persistantFormFields = formFieldsJSON
+    ? JSON.parse(formFieldsJSON)
+    : initialFormFields;
+  return persistantFormFields;
+};
+
 export function Form(props: { closeFormCB: () => void }) {
-  const [fieldState, setFieldState] = useState(formFields);
+  const [fieldState, setFieldState] = useState(getInitialFormData());
   const [newLabel, setNewLabel] = useState("");
+
+  useEffect(() => {
+    let timeout = setTimeout(() => {
+      saveFormData(fieldState);
+      console.log("Saved to local storage");
+    }, 1000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [fieldState]);
 
   const addField = () => {
     setFieldState([
@@ -64,12 +95,7 @@ export function Form(props: { closeFormCB: () => void }) {
         label: newLabel,
         type: "text",
         placeholder: newLabel,
-        icon: (
-          <span className="font-semibold text-lg">
-            {newLabel !== "" && newLabel[0].toUpperCase()}
-            {newLabel === "" && "A"}
-          </span>
-        ),
+        icon: newLabel !== "" ? newLabel[0].toUpperCase() : "A",
         value: "",
       },
     ]);
@@ -152,9 +178,9 @@ export function Form(props: { closeFormCB: () => void }) {
       <div className="flex gap-4 mt-2">
         <button
           className="bg-gray-700 py-2 w-full rounded-lg mt-3 hover:text-white hover:border-white border font-semibold transition-all border-gray-400 text-gray-400"
-          type="submit"
+          onClick={() => saveFormData(fieldState)}
         >
-          Submit
+          Save
         </button>
         <button
           className="bg-gray-700 py-2 w-full rounded-lg mt-3 hover:text-white hover:border-white border font-semibold transition-all border-gray-400 text-gray-400"
