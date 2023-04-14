@@ -76,7 +76,7 @@ const getInitialFormData: (id: number) => formData = (id) => {
   return newForm;
 };
 
-export function Form(props: { id: number; openHomeCB: () => void }) {
+export default function Form(props: { id: number }) {
   const [fieldState, setFieldState] = useState(() =>
     getInitialFormData(props.id)
   );
@@ -222,12 +222,12 @@ export function Form(props: { id: number; openHomeCB: () => void }) {
         >
           Clear Form
         </button>
-        <button
-          className="bg-gray-700 py-2 w-full rounded-lg mt-3 hover:text-white hover:border-white border font-semibold transition-all border-gray-400 text-gray-400"
-          onClick={props.openHomeCB}
+        <a
+          href="/"
+          className="text-center bg-gray-700 py-2 w-full rounded-lg mt-3 hover:text-white hover:border-white border font-semibold transition-all border-gray-400 text-gray-400"
         >
           Close Form
-        </button>
+        </a>
       </div>
     </div>
   );
