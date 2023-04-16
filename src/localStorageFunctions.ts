@@ -37,3 +37,8 @@ export const getInitialFormData: (
   saveLocalForms([...localForms, newForm]);
   return newForm;
 };
+
+export const getFormData: (id: number) => formData = (id) => {
+  const localForms = getLocalForms();
+  return localForms.filter((form) => form.id === id)[0];
+};

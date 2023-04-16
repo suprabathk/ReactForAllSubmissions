@@ -10,3 +10,8 @@ export interface formField {
   type: string;
   value: string;
 }
+
+export interface fieldAnswer {
+  id: number;
+  ans: string;
+}

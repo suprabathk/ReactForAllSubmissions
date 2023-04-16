@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DeleteIcon, SearchIcon } from "../AppIcons";
+import { DeleteIcon, PreviewIcon, SearchIcon } from "../AppIcons";
 import { Link, useQueryParams } from "raviger";
 import { getLocalForms, saveLocalForms } from "../localStorageFunctions";
 
@@ -73,6 +73,15 @@ export default function Home() {
                   className="text-start rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-700 rounded-l-md border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                 >
                   <h2 className="font-medium">{form.title}</h2>
+                </Link>
+                <Link
+                  href={`/preview/${form.id}`}
+                  className="group inline-flex items-center px-3 text-sm border border-y-0 bg-gray-600 text-gray-400 border-gray-700"
+                >
+                  <PreviewIcon className={"w-5 h-5"} />
+                  <span className="hidden group-hover:block ml-2 font-semibold">
+                    Preview
+                  </span>
                 </Link>
                 <button
                   onClick={() => deleteLocalForm(form.id)}
