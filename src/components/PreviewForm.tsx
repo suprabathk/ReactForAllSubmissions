@@ -24,7 +24,7 @@ export function PreviewForm(props: { id: number }) {
 
   return (
     <div>
-      <h2>{title}</h2>
+      <h2 className="text-white font-extrabold mt-3 mb-6 text-3xl">{title}</h2>
       {currentQuestionIndex < formFields.length ? (
         <PreviewQuestion
           id={formFields[currentQuestionIndex].id}
@@ -35,7 +35,7 @@ export function PreviewForm(props: { id: number }) {
           isLastQuestion={formFields[currentQuestionIndex].id === lastField.id}
         />
       ) : (
-        <div className="text-white font-semibold text-3xl text-center my-4">
+        <div className="text-white font-semibold text-3xl my-4">
           Thank you for filling the form
         </div>
       )}
