@@ -8,6 +8,5 @@ export interface formField {
   id: number;
   label: string;
   type: string;
-  placeholder: string;
   value: string;
 }

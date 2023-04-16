@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FieldIcon, PlusIcon } from "../AppIcons";
+import { PlusIcon } from "../AppIcons";
 import { LabelledInput } from "../LabelledInput";
 import { formField } from "../types";
 import { Link, navigate } from "raviger";
@@ -10,35 +10,30 @@ const initialFormFields: formField[] = [
     id: 1,
     label: "First Name",
     type: "text",
-    placeholder: "John",
     value: "",
   },
   {
     id: 2,
     label: "Last Name",
     type: "text",
-    placeholder: "Doe",
     value: "",
   },
   {
     id: 3,
     label: "Email",
     type: "text",
-    placeholder: "johndoe@company.com",
     value: "",
   },
   {
     id: 4,
     label: "Date of birth",
     type: "date",
-    placeholder: "01-01-2000",
     value: "",
   },
   {
     id: 5,
     label: "Phone number",
     type: "tel",
-    placeholder: "1234567890",
     value: "",
   },
 ];
@@ -48,6 +43,7 @@ export default function Form(props: { id: number }) {
     getInitialFormData(props.id, initialFormFields)
   );
   const [newLabel, setNewLabel] = useState("");
+  const [newType, setNewType] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -76,13 +72,13 @@ export default function Form(props: { id: number }) {
         {
           id: Number(new Date()),
           label: newLabel,
-          type: "text",
-          placeholder: newLabel,
+          type: newType,
           value: "",
         },
       ],
     });
     setNewLabel("");
+    setNewType("");
   };
 
   const removeField = (id: number) => {
@@ -92,26 +88,29 @@ export default function Form(props: { id: number }) {
     });
   };
 
-  const clearForm = () => {
-    setFieldState({
-      ...fieldState,
-      formFields: fieldState.formFields.map((field) => {
-        return {
-          ...field,
-          value: "",
-        };
-      }),
-    });
-  };
-
-  const updateValue = (id: number, value: string) => {
+  const updateLabel = (id: number, label: string) => {
     setFieldState({
       ...fieldState,
       formFields: fieldState.formFields.map((field) => {
         if (id === field.id) {
           return {
             ...field,
-            value: value,
+            label: label,
+          };
+        }
+        return field;
+      }),
+    });
+  };
+
+  const updateType = (id: number, type: string) => {
+    setFieldState({
+      ...fieldState,
+      formFields: fieldState.formFields.map((field) => {
+        if (id === field.id) {
+          return {
+            ...field,
+            type: type,
           };
         }
         return field;
@@ -124,7 +123,7 @@ export default function Form(props: { id: number }) {
       <div className="flex flex-col gap-2">
         <div className="flex">
           <span className="inline-flex items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-600 text-gray-400 border-gray-600">
-            Title
+            Form title
           </span>
           <input
             type="text"
@@ -139,6 +138,10 @@ export default function Form(props: { id: number }) {
           />
         </div>
 
+        <h3 className="block mt-2 text-sm font-medium text-gray-100">
+          Fields:
+        </h3>
+
         {fieldState.formFields.map((field) => (
           <LabelledInput
             key={field.id}
@@ -146,8 +149,9 @@ export default function Form(props: { id: number }) {
             label={field.label}
             type={field.type}
             value={field.value}
-            updateValueCB={updateValue}
-            placeholder={field.placeholder}
+            placeholder="Enter label for field"
+            updateLabelCB={updateLabel}
+            updateTypeCB={updateType}
             removeFieldCB={removeField}
           />
         ))}
@@ -160,9 +164,24 @@ export default function Form(props: { id: number }) {
           Add field
         </label>
         <div className="flex">
-          <span className="inline-flex items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-600 text-gray-400 border-gray-600">
-            <FieldIcon className="w-5 h-5" />
-          </span>
+          <select
+            value={newType}
+            onChange={(event) => setNewType(event.target.value)}
+            className="items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-600 text-gray-400 border-gray-600"
+          >
+            <option className="w-full bg-slate-600" value="text">
+              Text
+            </option>
+            <option className="w-full bg-slate-600" value="date">
+              Date
+            </option>
+            <option className="w-full bg-slate-600" value="tel">
+              Telephone
+            </option>
+            <option className="w-full bg-slate-600" value="email">
+              Email
+            </option>
+          </select>
           <input
             type="text"
             id="add-field"
@@ -186,12 +205,6 @@ export default function Form(props: { id: number }) {
           onClick={() => saveFormData(fieldState)}
         >
           Save
-        </button>
-        <button
-          className="bg-gray-700 py-2 w-full rounded-lg mt-3 hover:text-white hover:border-white border font-semibold transition-all border-gray-400 text-gray-400"
-          onClick={clearForm}
-        >
-          Clear Form
         </button>
         <Link
           href="/"

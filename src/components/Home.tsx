@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DeleteIcon } from "../AppIcons";
+import { DeleteIcon, SearchIcon } from "../AppIcons";
 import { Link, useQueryParams } from "raviger";
 import { getLocalForms, saveLocalForms } from "../localStorageFunctions";
 
@@ -44,13 +44,22 @@ export default function Home() {
               value={searchString}
               name="search"
               onChange={(event) => setSearchString(event.target.value)}
-              className="border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-700 rounded-md border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+              className="border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-700 rounded-l-md border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search for form"
             />
+            <button
+              type="submit"
+              className="group inline-flex items-center px-3 text-sm border border-l-0 rounded-r-md bg-gray-600 text-gray-400 border-gray-600"
+            >
+              <SearchIcon className={"w-5 h-5"} />
+              <span className="hidden group-hover:block ml-2 font-semibold">
+                Search
+              </span>
+            </button>
           </div>
         </div>
       </form>
-      <h1 className="font-semibold text-xl mt-2">Forms:</h1>
+      <h1 className="font-semibold text-xl mt-2">Forms</h1>
       {formData.length > 0 && (
         <div className="flex-col flex justify-center items-center">
           {formData
