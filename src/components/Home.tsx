@@ -1,16 +1,7 @@
-import React, { useState } from "react";
-import { formData } from "../types";
+import React, { useEffect, useState } from "react";
 import { DeleteIcon } from "../AppIcons";
 import { Link, useQueryParams } from "raviger";
-
-const getLocalForms: () => formData[] = () => {
-  const savedFormsJSON = localStorage.getItem("savedForms");
-  return savedFormsJSON ? JSON.parse(savedFormsJSON) : [];
-};
-
-const saveLocalForms = (localForms: formData[]) => {
-  localStorage.setItem("savedForms", JSON.stringify(localForms));
-};
+import { getLocalForms, saveLocalForms } from "../localStorageFunctions";
 
 export default function Home() {
   const [{ search }, setQuery] = useQueryParams();
@@ -21,8 +12,9 @@ export default function Home() {
     const localForms = getLocalForms();
     const updatedLocalForms = localForms.filter((form) => form.id !== id);
     setFormData(updatedLocalForms);
-    saveLocalForms(updatedLocalForms);
   };
+
+  useEffect(() => saveLocalForms(formData), [formData]);
 
   return (
     <div className="flex flex-col justify-center text-white">

@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FieldIcon, PlusIcon } from "../AppIcons";
 import { LabelledInput } from "../LabelledInput";
-import { formData, formField } from "../types";
+import { formField } from "../types";
 import { Link, navigate } from "raviger";
+import { getInitialFormData, saveFormData } from "../localStorageFunctions";
 
 const initialFormFields: formField[] = [
   {
@@ -42,44 +43,9 @@ const initialFormFields: formField[] = [
   },
 ];
 
-const saveLocalForms = (localForms: formData[]) => {
-  localStorage.setItem("savedForms", JSON.stringify(localForms));
-};
-
-const saveFormData = (currentState: formData) => {
-  const localForms = getLocalForms();
-  const updatedLocalForms = localForms.map((form) =>
-    form.id === currentState.id ? currentState : form
-  );
-  saveLocalForms(updatedLocalForms);
-};
-
-const getLocalForms: () => formData[] = () => {
-  const savedFormsJSON = localStorage.getItem("savedForms");
-  return savedFormsJSON ? JSON.parse(savedFormsJSON) : [];
-};
-
-const getInitialFormData: (id: number) => formData = (id) => {
-  const localForms = getLocalForms();
-  if (localForms.length > 0) {
-    for (let form of localForms) {
-      if (form.id === id) {
-        return form;
-      }
-    }
-  }
-  const newForm = {
-    id: Number(new Date()),
-    title: "Untitled Form",
-    formFields: initialFormFields,
-  };
-  saveLocalForms([...localForms, newForm]);
-  return newForm;
-};
-
 export default function Form(props: { id: number }) {
   const [fieldState, setFieldState] = useState(() =>
-    getInitialFormData(props.id)
+    getInitialFormData(props.id, initialFormFields)
   );
   const [newLabel, setNewLabel] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
