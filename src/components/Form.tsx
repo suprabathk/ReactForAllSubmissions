@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FieldIcon, PlusIcon } from "../AppIcons";
 import { LabelledInput } from "../LabelledInput";
 import { formData, formField } from "../types";
+import { Link, navigate } from "raviger";
 
 const initialFormFields: formField[] = [
   {
@@ -68,7 +69,7 @@ const getInitialFormData: (id: number) => formData = (id) => {
     }
   }
   const newForm = {
-    id: id,
+    id: Number(new Date()),
     title: "Untitled Form",
     formFields: initialFormFields,
   };
@@ -84,6 +85,10 @@ export default function Form(props: { id: number }) {
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    fieldState.id !== props.id && navigate(`/forms/${fieldState.id}`);
+  }, [fieldState.id, props.id]);
+
+  useEffect(() => {
     titleRef.current?.focus();
   }, []);
 
@@ -91,7 +96,7 @@ export default function Form(props: { id: number }) {
     let timeout = setTimeout(() => {
       saveFormData(fieldState);
       console.log("Saved to local storage");
-    }, 1000);
+    }, 500);
     return () => {
       clearTimeout(timeout);
     };
@@ -222,12 +227,12 @@ export default function Form(props: { id: number }) {
         >
           Clear Form
         </button>
-        <a
+        <Link
           href="/"
           className="text-center bg-gray-700 py-2 w-full rounded-lg mt-3 hover:text-white hover:border-white border font-semibold transition-all border-gray-400 text-gray-400"
         >
           Close Form
-        </a>
+        </Link>
       </div>
     </div>
   );
