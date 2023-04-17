@@ -24,10 +24,8 @@ export function PreviewForm(props: { id: number }) {
   useEffect(() => console.log(answers), [answers]);
 
   return (
-    <div className="mx-3 pb-4">
-      <h2 className="text-gray-700 font-extrabold mt-3 mb-6 text-3xl">
-        {title}
-      </h2>
+    <div className="text-gray-700">
+      <h2 className=" font-extrabold mt-3 mb-6 text-3xl">{title}</h2>
       {currentQuestionIndex < formFields.length ? (
         <PreviewQuestion
           id={formFields[currentQuestionIndex].id}
@@ -38,7 +36,7 @@ export function PreviewForm(props: { id: number }) {
           isLastQuestion={formFields[currentQuestionIndex].id === lastField.id}
         />
       ) : (
-        <div className="flex gap-2 items-center text-gray-700 font-semibold text-3xl my-4">
+        <div className="flex gap-2 items-center  font-semibold text-3xl my-4">
           <CompleteIcon className={"w-10 h-10"} />
           <span>Thank you for filling the form</span>
         </div>

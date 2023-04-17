@@ -98,7 +98,7 @@ export default function Home() {
         </div>
       )}
       {formData.length === 0 && (
-        <p className="text-white mt-2">There are no forms created!</p>
+        <p className="text-gray-700 mt-2">There are no forms created!</p>
       )}
     </div>
   );
