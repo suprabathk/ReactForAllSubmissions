@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getFormData } from "../utils/localStorageFunctions";
 import { PreviewQuestion } from "./PreviewQuestion";
 import { fieldAnswer } from "../types/types";
+import { CompleteIcon } from "../AppIcons";
 
 export function PreviewForm(props: { id: number }) {
   const { title, formFields } = getFormData(props.id);
@@ -37,8 +38,9 @@ export function PreviewForm(props: { id: number }) {
           isLastQuestion={formFields[currentQuestionIndex].id === lastField.id}
         />
       ) : (
-        <div className="text-gray-700 font-semibold text-3xl my-4">
-          Thank you for filling the form
+        <div className="flex gap-2 items-center text-gray-700 font-semibold text-3xl my-4">
+          <CompleteIcon className={"w-10 h-10"} />
+          <span>Thank you for filling the form</span>
         </div>
       )}
     </div>
