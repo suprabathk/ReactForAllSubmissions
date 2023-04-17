@@ -11,15 +11,17 @@ export function PreviewQuestion(props: {
 }) {
   const [answer, setAnswer] = useState(props.value);
   return (
-    <div className="w-full text-white">
-      <label htmlFor={`field-${props.id}`}>{props.label}</label>
+    <div className="w-full text-gray-700">
+      <label className="font-semibold" htmlFor={`field-${props.id}`}>
+        {props.label}
+      </label>
       <div className="flex mt-2">
         <input
           type={props.type}
           id={`field-${props.id}`}
           value={answer}
           onChange={(event) => setAnswer(event.target.value)}
-          className="rounded-l-md border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+          className="rounded-l-md border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500"
           placeholder="Enter your answer"
         />
         <button
@@ -27,7 +29,7 @@ export function PreviewQuestion(props: {
             setAnswer("");
             props.submitAndNextCB(answer);
           }}
-          className="px-3 text-sm border border-l-0 rounded-r-md bg-gray-600 text-gray-400 border-gray-600"
+          className="px-3 text-sm border border-l-0 rounded-r-md bg-gray-300 text-gray-700 border-gray-600"
         >
           {!props.isLastQuestion && (
             <div className="inline-flex items-center">

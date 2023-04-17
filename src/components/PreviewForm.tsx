@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { getFormData } from "../localStorageFunctions";
+import { getFormData } from "../utils/localStorageFunctions";
 import { PreviewQuestion } from "./PreviewQuestion";
-import { fieldAnswer } from "../types";
+import { fieldAnswer } from "../types/types";
 
 export function PreviewForm(props: { id: number }) {
   const { title, formFields } = getFormData(props.id);
@@ -23,8 +23,10 @@ export function PreviewForm(props: { id: number }) {
   useEffect(() => console.log(answers), [answers]);
 
   return (
-    <div>
-      <h2 className="text-white font-extrabold mt-3 mb-6 text-3xl">{title}</h2>
+    <div className="mx-3 pb-4">
+      <h2 className="text-gray-700 font-extrabold mt-3 mb-6 text-3xl">
+        {title}
+      </h2>
       {currentQuestionIndex < formFields.length ? (
         <PreviewQuestion
           id={formFields[currentQuestionIndex].id}
@@ -35,7 +37,7 @@ export function PreviewForm(props: { id: number }) {
           isLastQuestion={formFields[currentQuestionIndex].id === lastField.id}
         />
       ) : (
-        <div className="text-white font-semibold text-3xl my-4">
+        <div className="text-gray-700 font-semibold text-3xl my-4">
           Thank you for filling the form
         </div>
       )}

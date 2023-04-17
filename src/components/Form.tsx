@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { PlusIcon } from "../AppIcons";
 import { LabelledInput } from "../LabelledInput";
-import { formField } from "../types";
+import { formField } from "../types/types";
 import { Link, navigate } from "raviger";
-import { getInitialFormData, saveFormData } from "../localStorageFunctions";
+import {
+  getInitialFormData,
+  saveFormData,
+} from "../utils/localStorageFunctions";
 
 const initialFormFields: formField[] = [
   {
@@ -122,7 +125,7 @@ export default function Form(props: { id: number }) {
     <div className="flex flex-col gap-4 divide-y">
       <div className="flex flex-col gap-2">
         <div className="flex">
-          <span className="inline-flex items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-600 text-gray-400 border-gray-600">
+          <span className="inline-flex items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-300 text-gray-700 border-gray-600">
             Form title
           </span>
           <input
@@ -133,12 +136,12 @@ export default function Form(props: { id: number }) {
             onChange={(event) =>
               setFieldState({ ...fieldState, title: event.target.value })
             }
-            className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 rounded-r-md bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+            className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 rounded-r-md bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-700 focus:ring-purple-500 focus:border-purple-500"
             placeholder="Form title"
           />
         </div>
 
-        <h3 className="block mt-2 text-sm font-medium text-gray-100">
+        <h3 className="block mt-2 text-sm font-medium text-gray-700">
           Fields:
         </h3>
 
@@ -159,7 +162,7 @@ export default function Form(props: { id: number }) {
       <div className="w-full pt-2">
         <label
           htmlFor="add-field"
-          className="block mb-2 text-sm font-medium text-gray-100"
+          className="block mb-2 text-sm font-medium text-gray-700"
         >
           Add field
         </label>
@@ -167,18 +170,18 @@ export default function Form(props: { id: number }) {
           <select
             value={newType}
             onChange={(event) => setNewType(event.target.value)}
-            className="items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-600 text-gray-400 border-gray-600"
+            className="items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-300 text-gray-700 border-gray-600"
           >
-            <option className="w-full bg-slate-600" value="text">
+            <option className="w-full bg-gray-300" value="text">
               Text
             </option>
-            <option className="w-full bg-slate-600" value="date">
+            <option className="w-full bg-gray-300" value="date">
               Date
             </option>
-            <option className="w-full bg-slate-600" value="tel">
+            <option className="w-full bg-gray-300" value="tel">
               Telephone
             </option>
-            <option className="w-full bg-slate-600" value="email">
+            <option className="w-full bg-gray-300" value="email">
               Email
             </option>
           </select>
@@ -187,12 +190,12 @@ export default function Form(props: { id: number }) {
             id="add-field"
             value={newLabel}
             onChange={(event) => setNewLabel(event.target.value)}
-            className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+            className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-700 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Field name"
           />
           <button
             onClick={addField}
-            className="inline-flex items-center px-3 text-sm border border-l-0 rounded-r-md bg-gray-600 text-gray-400 border-gray-600"
+            className="inline-flex items-center px-3 text-sm border border-l-0 rounded-r-md bg-gray-300 text-gray-700 border-gray-600"
           >
             <PlusIcon className={"w-5 h-5"} />
             <span className="ml-2 font-semibold">Add field</span>
@@ -201,14 +204,14 @@ export default function Form(props: { id: number }) {
       </div>
       <div className="flex gap-4 mt-2">
         <button
-          className="bg-gray-700 py-2 w-full rounded-lg mt-3 hover:text-white hover:border-white border font-semibold transition-all border-gray-400 text-gray-400"
+          className="bg-gray-300 py-2 w-full rounded-lg mt-3 border font-semibold transition-all border-gray-700 text-gray-700"
           onClick={() => saveFormData(fieldState)}
         >
           Save
         </button>
         <Link
           href="/"
-          className="text-center bg-gray-700 py-2 w-full rounded-lg mt-3 hover:text-white hover:border-white border font-semibold transition-all border-gray-400 text-gray-400"
+          className="text-center bg-gray-300 py-2 w-full rounded-lg mt-3 border font-semibold transition-all border-gray-700 text-gray-7s00"
         >
           Close Form
         </Link>
