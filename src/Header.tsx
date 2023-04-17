@@ -18,7 +18,7 @@ export default function Header(props: { title: string }) {
           <ActiveLink
             href={link.url}
             key={link.url}
-            className="text-gray-600 p-2 m-2 uppercase"
+            className="p-2 m-2 uppercase"
             exactActiveClass="text-blue-300"
           >
             {link.page}
