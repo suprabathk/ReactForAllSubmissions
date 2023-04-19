@@ -1,17 +1,63 @@
-export interface formData {
+export type textFieldTypes = "text" | "email" | "date" | "tel" | "time";
+
+type TextField = {
+  kind: "text";
+  id: number;
+  label: string;
+  fieldType: textFieldTypes;
+  value: string;
+};
+
+type DropdownField = {
+  kind: "dropdown";
+  id: number;
+  label: string;
+  options: fieldOption[];
+  value: string;
+};
+
+export type MultiSelect = {
+  kind: "multiselect";
+  id: number;
+  label: string;
+  options: fieldOption[];
+  value: string[];
+};
+
+type TextArea = {
+  kind: "textarea";
+  id: number;
+  label: string;
+  value: string;
+};
+
+export type RadioButton = {
+  kind: "radio";
+  id: number;
+  label: string;
+  value: string;
+  options: fieldOption[];
+};
+
+export type formField =
+  | TextField
+  | DropdownField
+  | TextArea
+  | RadioButton
+  | MultiSelect;
+
+export type formData = {
   id: number;
   title: string;
   formFields: formField[];
-}
+};
 
-export interface formField {
+export type fieldAnswer = {
   id: number;
-  label: string;
-  type: string;
-  value: string;
-}
+  ans: string | string[];
+};
 
-export interface fieldAnswer {
+export type fieldOption = {
   id: number;
-  ans: string;
-}
+  option: string;
+};

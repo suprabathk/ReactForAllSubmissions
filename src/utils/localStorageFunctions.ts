@@ -1,6 +1,8 @@
 import { formData, formField } from "../types/types";
 
-export const saveLocalForms = (localForms: formData[]) => {
+export const saveLocalForms: (localForms: formData[]) => void = (
+  localForms: formData[]
+) => {
   localStorage.setItem("savedForms", JSON.stringify(localForms));
 };
 

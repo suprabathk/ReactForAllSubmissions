@@ -1,42 +1,51 @@
 import React, { useEffect, useRef, useState } from "react";
 import { PlusIcon } from "../AppIcons";
-import { LabelledInput } from "../LabelledInput";
-import { formField } from "../types/types";
+import { TextField } from "../formBuilderFields/TextField";
+import { formField, fieldOption, textFieldTypes } from "../types/types";
 import { Link, navigate } from "raviger";
 import {
   getInitialFormData,
   saveFormData,
 } from "../utils/localStorageFunctions";
+import { TextArea } from "../formBuilderFields/TextArea";
+import { RadioButtonField } from "../formBuilderFields/RadioButtonField";
+import { DropdownField } from "../formBuilderFields/DropdownField";
+import { MultiSelectField } from "../formBuilderFields/MultiSelectField";
 
 const initialFormFields: formField[] = [
   {
+    kind: "text",
     id: 1,
     label: "First Name",
-    type: "text",
+    fieldType: "text",
     value: "",
   },
   {
+    kind: "text",
     id: 2,
     label: "Last Name",
-    type: "text",
+    fieldType: "text",
     value: "",
   },
   {
+    kind: "text",
     id: 3,
     label: "Email",
-    type: "text",
+    fieldType: "text",
     value: "",
   },
   {
+    kind: "text",
     id: 4,
     label: "Date of birth",
-    type: "date",
+    fieldType: "date",
     value: "",
   },
   {
+    kind: "text",
     id: 5,
     label: "Phone number",
-    type: "tel",
+    fieldType: "tel",
     value: "",
   },
 ];
@@ -46,7 +55,8 @@ export default function Form(props: { id: number }) {
     getInitialFormData(props.id, initialFormFields)
   );
   const [newLabel, setNewLabel] = useState("");
-  const [newType, setNewType] = useState("");
+  const [newTextType, setNewTextType] = useState<textFieldTypes>("text");
+  const [newKind, setNewKind] = useState<formField["kind"]>("text");
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -68,20 +78,79 @@ export default function Form(props: { id: number }) {
   }, [fieldState]);
 
   const addField = () => {
-    setFieldState({
-      ...fieldState,
-      formFields: [
-        ...fieldState.formFields,
-        {
-          id: Number(new Date()),
-          label: newLabel,
-          type: newType,
-          value: "",
-        },
-      ],
-    });
+    if (newKind === "text") {
+      setFieldState({
+        ...fieldState,
+        formFields: [
+          ...fieldState.formFields,
+          {
+            kind: newKind,
+            id: Number(new Date()),
+            label: newLabel,
+            fieldType: newTextType,
+            value: "",
+          },
+        ],
+      });
+    } else if (newKind === "textarea") {
+      setFieldState({
+        ...fieldState,
+        formFields: [
+          ...fieldState.formFields,
+          {
+            kind: newKind,
+            id: Number(new Date()),
+            label: newLabel,
+            value: "",
+          },
+        ],
+      });
+    } else if (newKind === "dropdown") {
+      setFieldState({
+        ...fieldState,
+        formFields: [
+          ...fieldState.formFields,
+          {
+            kind: newKind,
+            id: Number(new Date()),
+            label: newLabel,
+            options: [{ id: Number(new Date()), option: "" }],
+            value: "",
+          },
+        ],
+      });
+    } else if (newKind === "multiselect") {
+      setFieldState({
+        ...fieldState,
+        formFields: [
+          ...fieldState.formFields,
+          {
+            kind: newKind,
+            id: Number(new Date()),
+            label: newLabel,
+            options: [{ id: Number(new Date()), option: "" }],
+            value: [],
+          },
+        ],
+      });
+    } else if (newKind === "radio") {
+      setFieldState({
+        ...fieldState,
+        formFields: [
+          ...fieldState.formFields,
+          {
+            kind: newKind,
+            id: Number(new Date()),
+            label: newLabel,
+            options: [{ id: Number(new Date()), option: "" }],
+            value: "",
+          },
+        ],
+      });
+    }
     setNewLabel("");
-    setNewType("");
+    setNewKind("text");
+    setNewTextType("text");
   };
 
   const removeField = (id: number) => {
@@ -106,14 +175,34 @@ export default function Form(props: { id: number }) {
     });
   };
 
-  const updateType = (id: number, type: string) => {
+  const updateTextType = (id: number, type: textFieldTypes) => {
     setFieldState({
       ...fieldState,
       formFields: fieldState.formFields.map((field) => {
         if (id === field.id) {
           return {
             ...field,
-            type: type,
+            fieldType: type,
+          };
+        }
+        return field;
+      }),
+    });
+  };
+
+  const updateOptions = (id: number, options: fieldOption[]) => {
+    setFieldState({
+      ...fieldState,
+      formFields: fieldState.formFields.map((field) => {
+        if (
+          id === field.id &&
+          (field.kind === "radio" ||
+            field.kind === "dropdown" ||
+            field.kind === "multiselect")
+        ) {
+          return {
+            ...field,
+            options: options,
           };
         }
         return field;
@@ -125,7 +214,7 @@ export default function Form(props: { id: number }) {
     <div className="flex flex-col gap-4 divide-y">
       <div className="flex flex-col gap-2">
         <div className="flex">
-          <span className="inline-flex items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-300 text-gray-700 border-gray-600">
+          <span className="inline-flex items-center px-3 text-md font-semibold border border-r-0 rounded-l-md bg-gray-300 text-gray-700 border-gray-600">
             Form title
           </span>
           <input
@@ -140,24 +229,95 @@ export default function Form(props: { id: number }) {
             placeholder="Form title"
           />
         </div>
-
-        <h3 className="block mt-2 text-sm font-medium text-gray-700">
-          Fields:
-        </h3>
-
-        {fieldState.formFields.map((field) => (
-          <LabelledInput
-            key={field.id}
-            id={field.id}
-            label={field.label}
-            type={field.type}
-            value={field.value}
-            placeholder="Enter label for field"
-            updateLabelCB={updateLabel}
-            updateTypeCB={updateType}
-            removeFieldCB={removeField}
-          />
-        ))}
+        <div>
+          {
+            // eslint-disable-next-line array-callback-return
+            fieldState.formFields.map((field) => {
+              switch (field.kind) {
+                case "text":
+                  return (
+                    <div className="my-1" key={field.id}>
+                      <h3 className="text-md font-semibold">Text Field</h3>
+                      <TextField
+                        key={field.id}
+                        id={field.id}
+                        label={field.label}
+                        fieldType={field.fieldType}
+                        value={field.value}
+                        placeholder="Enter label for Text Field"
+                        updateLabelCB={updateLabel}
+                        updateTextTypeCB={updateTextType}
+                        removeFieldCB={removeField}
+                      />
+                    </div>
+                  );
+                case "textarea":
+                  return (
+                    <div className="my-1" key={field.id}>
+                      <h3 className="text-md font-semibold">Text Area</h3>
+                      <TextArea
+                        key={field.id}
+                        id={field.id}
+                        label={field.label}
+                        placeholder={"Enter label for Text area"}
+                        value={field.value}
+                        updateLabelCB={updateLabel}
+                        removeFieldCB={removeField}
+                      />
+                    </div>
+                  );
+                case "dropdown":
+                  return (
+                    <div className="my-1" key={field.id}>
+                      <h3 className="text-md font-semibold">Dropdown</h3>
+                      <DropdownField
+                        id={field.id}
+                        label={field.label}
+                        placeholder="Enter label for Dropdown"
+                        value={field.value}
+                        options={field.options}
+                        updateOptionsCB={updateOptions}
+                        updateLabelCB={updateLabel}
+                        removeFieldCB={removeField}
+                      />
+                    </div>
+                  );
+                case "multiselect":
+                  return (
+                    <div className="my-1" key={field.id}>
+                      <h3 className="text-md font-semibold">Multiselect</h3>
+                      <MultiSelectField
+                        id={field.id}
+                        label={field.label}
+                        placeholder="Enter label for Dropdown"
+                        value={field.value}
+                        options={field.options}
+                        updateOptionsCB={updateOptions}
+                        updateLabelCB={updateLabel}
+                        removeFieldCB={removeField}
+                      />
+                    </div>
+                  );
+                case "radio":
+                  return (
+                    <div className="my-1" key={field.id}>
+                      <h3 className="text-md font-semibold">Radio button</h3>
+                      <RadioButtonField
+                        id={field.id}
+                        label={field.label}
+                        placeholder="Enter label for Radio button"
+                        value={field.value}
+                        options={field.options}
+                        updateOptionsCB={updateOptions}
+                        updateLabelCB={updateLabel}
+                        removeFieldCB={removeField}
+                      />
+                    </div>
+                  );
+              }
+            })
+          }
+        </div>
       </div>
       <div className="w-full pt-2">
         <label
@@ -168,21 +328,26 @@ export default function Form(props: { id: number }) {
         </label>
         <div className="flex">
           <select
-            value={newType}
-            onChange={(event) => setNewType(event.target.value)}
+            value={newKind}
+            onChange={(event) => {
+              setNewKind(event.target.value as formField["kind"]);
+            }}
             className="items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-300 text-gray-700 border-gray-600"
           >
             <option className="w-full bg-gray-300" value="text">
-              Text
+              Text Field
             </option>
-            <option className="w-full bg-gray-300" value="date">
-              Date
+            <option className="w-full bg-gray-300" value="textarea">
+              Text Area
             </option>
-            <option className="w-full bg-gray-300" value="tel">
-              Telephone
+            <option className="w-full bg-gray-300" value="radio">
+              Radio button
             </option>
-            <option className="w-full bg-gray-300" value="email">
-              Email
+            <option className="w-full bg-gray-300" value="dropdown">
+              Dropdown
+            </option>
+            <option className="w-full bg-gray-300" value="multiselect">
+              Multi-Select
             </option>
           </select>
           <input

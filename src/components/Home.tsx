@@ -71,9 +71,10 @@ export default function Home() {
               <div className="flex w-full my-2" key={form.id}>
                 <Link
                   href={`/forms/${form.id}`}
-                  className="text-start rounded-none border border-r-0 block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 rounded-l-md border-gray-600 placeholder-gray-400 text-gray-700 focus:ring-gray-500 focus:border-gray-500"
+                  className="flex flex-col text-start rounded-none border border-r-0 flex-1 min-w-0 w-full text-sm px-2.5 py-1 bg-gray-100 rounded-l-md border-gray-600 placeholder-gray-400 text-gray-700 focus:ring-gray-500 focus:border-gray-500"
                 >
-                  <h2 className="font-medium">{form.title}</h2>
+                  <h2 className="font-medium text-lg">{form.title}</h2>
+                  <h2 className="">{form.formFields.length} fields</h2>
                 </Link>
                 <Link
                   href={`/preview/${form.id}`}

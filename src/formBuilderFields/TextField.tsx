@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { DeleteIcon } from "./AppIcons";
+import { DeleteIcon } from "../AppIcons";
+import { textFieldTypes } from "../types/types";
 
-export function LabelledInput(props: {
+export function TextField(props: {
   id: number;
   label: string;
   placeholder: string;
   value: string;
-  type: string;
+  fieldType: textFieldTypes;
   updateLabelCB: (id: number, value: string) => void;
-  updateTypeCB: (id: number, type: string) => void;
+  updateTextTypeCB: (id: number, type: textFieldTypes) => void;
   removeFieldCB: (id: number) => void;
 }) {
   const [label, setLabel] = useState(props.label);
-  const [type, setType] = useState(props.type);
+  const [type, setType] = useState(props.fieldType);
 
   useEffect(() => {
     let timeout = setTimeout(() => {
@@ -26,7 +27,7 @@ export function LabelledInput(props: {
 
   useEffect(() => {
     let timeout = setTimeout(() => {
-      props.updateTypeCB(props.id, type);
+      props.updateTextTypeCB(props.id, type as textFieldTypes);
     }, 500);
     return () => {
       clearTimeout(timeout);
@@ -39,7 +40,7 @@ export function LabelledInput(props: {
       <div className="flex">
         <select
           value={type}
-          onChange={(event) => setType(event.target.value)}
+          onChange={(event) => setType(event.target.value as textFieldTypes)}
           className="items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-300 text-gray-900 border-gray-600"
         >
           <option className="w-full bg-gray-200" value="text">
@@ -47,6 +48,9 @@ export function LabelledInput(props: {
           </option>
           <option className="w-full bg-gray-200" value="date">
             Date
+          </option>
+          <option className="w-full bg-gray-200" value="time">
+            Time
           </option>
           <option className="w-full bg-gray-200" value="tel">
             Telephone
@@ -60,7 +64,7 @@ export function LabelledInput(props: {
           id={`field-${props.id}`}
           value={label}
           onChange={(event) => setLabel(event.target.value)}
-          className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-purple-400 text-gray-900 focus:ring-purple-500 focus:border-purple-500"
+          className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-900 focus:ring-gray-500 focus:border-gray-500"
           placeholder={props.placeholder}
         />
         <button
