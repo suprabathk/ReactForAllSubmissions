@@ -25,6 +25,17 @@ export function NextPrevAndSubmitButton({
 }) {
   return (
     <div className="flex gap-2">
+      {isFirstQuestion && (
+        <Link
+          href="/"
+          className="px-3 py-1 w-full text-sm text-center  border rounded-md bg-gray-300 text-gray-700 border-gray-600"
+        >
+          <div className="inline-flex items-center">
+            <PrevIcon className={"w-5 h-5"} />
+            <span className=" ml-2 font-semibold">Cancel</span>
+          </div>
+        </Link>
+      )}
       {!isFirstQuestion && (
         <button
           onClick={onPrev}
