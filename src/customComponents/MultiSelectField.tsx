@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { DownArrow } from "../AppIcons";
 import { MultiSelect } from "../types/types";
 
@@ -11,7 +11,7 @@ export function MultiSelectField({
   currentQuestion: MultiSelect;
   setCurrentAnswerCB: (options: string[]) => void;
 }) {
-  const optionDiv = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
   const addOption = (option: string) => {
     if (Array.isArray(currentAnswer)) {
       if (!currentAnswer.includes(option))
@@ -44,19 +44,16 @@ export function MultiSelectField({
     <div className="rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500">
       <button
         className="w-full flex justify-between"
-        onClick={() =>
-          optionDiv.current?.classList.contains("hidden")
-            ? optionDiv.current?.classList.remove("hidden")
-            : optionDiv.current?.classList.add("hidden")
-        }
+        onClick={() => setIsOpen((isOpen) => !isOpen)}
       >
         <span>Select multiple options</span>
-        <DownArrow className={"w-5 h-5"} />
+        <DownArrow
+          className={`transition-all w-5 h-5 ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
       <div
         id={`q-${currentQuestion.id}`}
-        className="py-2 hidden flex flex-col gap-2"
-        ref={optionDiv}
+        className={`py-2 flex-col gap-2 ${isOpen ? "flex" : "hidden"}`}
       >
         <button
           onClick={() =>
