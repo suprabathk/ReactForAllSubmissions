@@ -1,5 +1,6 @@
 import { Link } from "raviger";
 import React from "react";
+import { BackIcon } from "../AppIcons";
 
 export default function Page404() {
   return (
@@ -18,9 +19,10 @@ export default function Page404() {
           </p>
           <Link
             href="/"
-            className="px-8 py-3 font-semibold rounded bg-blue-400 text-white"
+            className="flex gap-2 items-center justify-center font-semibold text-blue-300"
           >
-            Back to homepage
+            <BackIcon className="w-4 h-4" />
+            <span>Back to homepage</span>
           </Link>
         </div>
       </div>
