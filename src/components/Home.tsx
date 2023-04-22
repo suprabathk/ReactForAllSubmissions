@@ -55,7 +55,7 @@ export default function Home() {
         <h1 className="font-bold text-2xl">Forms</h1>
         <Link
           className="flex items-center gap-1 text-center bg-gray-100 px-2 rounded-lg my-2 border font-semibold transition-all border-gray-400 text-gray-700"
-          href={"/forms/0"}
+          href={"/form/0"}
         >
           <PlusIcon className={"w-5 h-5"} />
           Create Form
@@ -70,7 +70,7 @@ export default function Home() {
             .map((form) => (
               <div className="flex w-full my-2" key={form.id}>
                 <Link
-                  href={`/forms/${form.id}`}
+                  href={`/form/${form.id}`}
                   className="flex flex-col text-start rounded-none border border-r-0 flex-1 min-w-0 w-full text-sm px-2.5 py-1 bg-gray-100 rounded-l-md border-gray-600 placeholder-gray-400 text-gray-700 focus:ring-gray-500 focus:border-gray-500"
                 >
                   <h2 className="font-medium text-lg">{form.title}</h2>

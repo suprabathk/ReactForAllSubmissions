@@ -60,7 +60,7 @@ export default function Form(props: { id: number }) {
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fieldState.id !== props.id && navigate(`/forms/${fieldState.id}`);
+    fieldState.id !== props.id && navigate(`/form/${fieldState.id}`);
   }, [fieldState.id, props.id]);
 
   useEffect(() => {

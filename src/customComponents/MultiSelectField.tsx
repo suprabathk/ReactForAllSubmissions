@@ -1,11 +1,11 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { DownArrow } from "../AppIcons";
 import { MultiSelect } from "../types/types";
 
 export function MultiSelectField({
   currentAnswer,
-  setCurrentAnswerCB,
   currentQuestion,
+  setCurrentAnswerCB,
 }: {
   currentAnswer: string | string[];
   currentQuestion: MultiSelect;
@@ -19,6 +19,11 @@ export function MultiSelectField({
       else setCurrentAnswerCB(currentAnswer.filter((ans) => ans !== option));
     }
   };
+
+  useEffect(() => {
+    setCurrentAnswerCB([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isOptionSelected = (option: string) => {
     if (Array.isArray(currentAnswer)) {
