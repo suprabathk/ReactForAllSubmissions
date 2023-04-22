@@ -212,112 +212,121 @@ export default function Form(props: { id: number }) {
 
   return (
     <div className="flex flex-col gap-4 divide-y">
-      <div className="flex flex-col gap-2">
-        <div className="flex">
-          <span className="inline-flex items-center px-3 text-md font-semibold border border-r-0 rounded-l-md bg-gray-300 text-gray-700 border-gray-600">
-            Form title
-          </span>
-          <input
-            type="text"
-            id="form-title"
-            ref={titleRef}
-            value={fieldState.title}
-            onChange={(event) =>
-              setFieldState({ ...fieldState, title: event.target.value })
-            }
-            className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 rounded-r-md bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-700 focus:ring-purple-500 focus:border-purple-500"
-            placeholder="Form title"
-          />
-        </div>
-        <div>
-          {
-            // eslint-disable-next-line array-callback-return
-            fieldState.formFields.map((field) => {
-              switch (field.kind) {
-                case "text":
-                  return (
-                    <div className="my-1" key={field.id}>
-                      <h3 className="text-md font-semibold">Text Field</h3>
-                      <TextField
-                        key={field.id}
-                        id={field.id}
-                        label={field.label}
-                        fieldType={field.fieldType}
-                        value={field.value}
-                        placeholder="Enter label for Text Field"
-                        updateLabelCB={updateLabel}
-                        updateTextTypeCB={updateTextType}
-                        removeFieldCB={removeField}
-                      />
-                    </div>
-                  );
-                case "textarea":
-                  return (
-                    <div className="my-1" key={field.id}>
-                      <h3 className="text-md font-semibold">Text Area</h3>
-                      <TextArea
-                        key={field.id}
-                        id={field.id}
-                        label={field.label}
-                        placeholder={"Enter label for Text area"}
-                        value={field.value}
-                        updateLabelCB={updateLabel}
-                        removeFieldCB={removeField}
-                      />
-                    </div>
-                  );
-                case "dropdown":
-                  return (
-                    <div className="my-1" key={field.id}>
-                      <h3 className="text-md font-semibold">Dropdown</h3>
-                      <DropdownField
-                        id={field.id}
-                        label={field.label}
-                        placeholder="Enter label for Dropdown"
-                        value={field.value}
-                        options={field.options}
-                        updateOptionsCB={updateOptions}
-                        updateLabelCB={updateLabel}
-                        removeFieldCB={removeField}
-                      />
-                    </div>
-                  );
-                case "multiselect":
-                  return (
-                    <div className="my-1" key={field.id}>
-                      <h3 className="text-md font-semibold">Multiselect</h3>
-                      <MultiSelectField
-                        id={field.id}
-                        label={field.label}
-                        placeholder="Enter label for Dropdown"
-                        value={field.value}
-                        options={field.options}
-                        updateOptionsCB={updateOptions}
-                        updateLabelCB={updateLabel}
-                        removeFieldCB={removeField}
-                      />
-                    </div>
-                  );
-                case "radio":
-                  return (
-                    <div className="my-1" key={field.id}>
-                      <h3 className="text-md font-semibold">Radio button</h3>
-                      <RadioButtonField
-                        id={field.id}
-                        label={field.label}
-                        placeholder="Enter label for Radio button"
-                        value={field.value}
-                        options={field.options}
-                        updateOptionsCB={updateOptions}
-                        updateLabelCB={updateLabel}
-                        removeFieldCB={removeField}
-                      />
-                    </div>
-                  );
-              }
-            })
+      <div className="flex mt-2">
+        <span className="inline-flex items-center px-3 text-md font-semibold border border-r-0 rounded-l-md bg-gray-300 text-gray-700 border-gray-600">
+          Form title
+        </span>
+        <input
+          type="text"
+          id="form-title"
+          ref={titleRef}
+          value={fieldState.title}
+          onChange={(event) =>
+            setFieldState({ ...fieldState, title: event.target.value })
           }
-        </div>
+          className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 rounded-r-md bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-700 focus:ring-purple-500 focus:border-purple-500"
+          placeholder="Form title"
+        />
+      </div>
+      <div>
+        {fieldState.formFields.length > 0 ? (
+          <div>
+            {
+              // eslint-disable-next-line array-callback-return
+              fieldState.formFields.map((field) => {
+                switch (field.kind) {
+                  case "text":
+                    return (
+                      <div className="my-1" key={field.id}>
+                        <h3 className="text-md font-semibold">Text Field</h3>
+                        <TextField
+                          key={field.id}
+                          id={field.id}
+                          label={field.label}
+                          fieldType={field.fieldType}
+                          value={field.value}
+                          placeholder="Enter label for Text Field"
+                          updateLabelCB={updateLabel}
+                          updateTextTypeCB={updateTextType}
+                          removeFieldCB={removeField}
+                        />
+                      </div>
+                    );
+                  case "textarea":
+                    return (
+                      <div className="my-1" key={field.id}>
+                        <h3 className="text-md font-semibold">Text Area</h3>
+                        <TextArea
+                          key={field.id}
+                          id={field.id}
+                          label={field.label}
+                          placeholder={"Enter label for Text area"}
+                          value={field.value}
+                          updateLabelCB={updateLabel}
+                          removeFieldCB={removeField}
+                        />
+                      </div>
+                    );
+                  case "dropdown":
+                    return (
+                      <div className="my-1" key={field.id}>
+                        <h3 className="text-md font-semibold">Dropdown</h3>
+                        <DropdownField
+                          id={field.id}
+                          label={field.label}
+                          placeholder="Enter label for Dropdown"
+                          value={field.value}
+                          options={field.options}
+                          updateOptionsCB={updateOptions}
+                          updateLabelCB={updateLabel}
+                          removeFieldCB={removeField}
+                        />
+                      </div>
+                    );
+                  case "multiselect":
+                    return (
+                      <div className="my-1" key={field.id}>
+                        <h3 className="text-md font-semibold">Multiselect</h3>
+                        <MultiSelectField
+                          id={field.id}
+                          label={field.label}
+                          placeholder="Enter label for Dropdown"
+                          value={field.value}
+                          options={field.options}
+                          updateOptionsCB={updateOptions}
+                          updateLabelCB={updateLabel}
+                          removeFieldCB={removeField}
+                        />
+                      </div>
+                    );
+                  case "radio":
+                    return (
+                      <div className="my-1" key={field.id}>
+                        <h3 className="text-md font-semibold">Radio button</h3>
+                        <RadioButtonField
+                          id={field.id}
+                          label={field.label}
+                          placeholder="Enter label for Radio button"
+                          value={field.value}
+                          options={field.options}
+                          updateOptionsCB={updateOptions}
+                          updateLabelCB={updateLabel}
+                          removeFieldCB={removeField}
+                        />
+                      </div>
+                    );
+                }
+              })
+            }
+          </div>
+        ) : (
+          <div>
+            <h4 className="font-semibold text-xl my-1">
+              There are no fields currently
+            </h4>
+            <p>You can start adding fields below</p>
+          </div>
+        )}
       </div>
       <div className="w-full pt-2">
         <label
