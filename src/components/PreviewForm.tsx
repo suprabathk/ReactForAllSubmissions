@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { getFormData } from "../utils/localStorageFunctions";
 import { fieldAnswer } from "../types/types";
 import {
@@ -68,9 +68,29 @@ export function NextPrevAndSubmitButton({
   );
 }
 
+type addAnswerAction = {
+  type: "add_answer";
+  questionID: number;
+  ans: string | string[];
+};
+type answerActions = addAnswerAction;
+
+function reducer(state: fieldAnswer[], action: answerActions) {
+  switch (action.type) {
+    case "add_answer":
+      return [
+        ...state,
+        {
+          id: action.questionID,
+          ans: action.ans,
+        },
+      ];
+  }
+}
+
 export function PreviewForm(props: { id: number }) {
-  const [currentFormData] = useState(getFormData(props.id));
-  const [answers, setAnswers] = useState<fieldAnswer[]>([]);
+  const currentFormData = getFormData(props.id);
+  const [answers, dispatch] = useReducer(reducer, []);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(
     currentFormData.formFields[0]
@@ -91,7 +111,8 @@ export function PreviewForm(props: { id: number }) {
 
   useEffect(() => {
     setCurrentQuestion(currentFormData.formFields[currentQuestionIndex]);
-  }, [currentFormData.formFields, currentQuestionIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQuestionIndex]);
 
   useEffect(() => {
     setIsLastQuestion(
@@ -99,17 +120,16 @@ export function PreviewForm(props: { id: number }) {
         currentQuestion
     );
     setIsFirstQuestion(currentFormData.formFields[0] === currentQuestion);
-  }, [currentFormData.formFields, currentQuestion]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQuestion]);
 
   const submitandNextCB = (questionID: number, ans: string | string[]) => {
     if (ans)
-      setAnswers([
-        ...answers,
-        {
-          id: questionID,
-          ans: ans,
-        },
-      ]);
+      dispatch({
+        type: "add_answer",
+        questionID: questionID,
+        ans: ans,
+      });
     setCurrentAnswer("");
     setCurrentQuestionIndex(currentQuestionIndex + 1);
   };
