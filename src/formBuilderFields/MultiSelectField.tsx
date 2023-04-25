@@ -97,25 +97,36 @@ export function MultiSelectField(props: {
             </button>
           </div>
 
-          {options.map((option) => (
-            <div className="w-full flex my-1" key={option.id}>
-              <input
-                type="text"
-                value={option.option}
-                onChange={(event) =>
-                  updateOption(option.id, event.target.value)
-                }
-                className="rounded-l-md border block flex-1 min-w-0 w-full text-sm p-1 bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-900 focus:ring-gray-500 focus:border-gray-500"
-                placeholder="Enter a option"
-              />
-              <button
-                onClick={() => removeOption(option.id)}
-                className="px-3 text-sm border border-l-0 rounded-r-md bg-gray-300 text-gray-900 border-gray-600"
-              >
-                <DeleteIcon className={"w-5 h-5"} />
-              </button>
+          {options.length > 0 ? (
+            <div>
+              {options.map((option) => (
+                <div className="w-full flex my-1" key={option.id}>
+                  <input
+                    type="text"
+                    value={option.option}
+                    onChange={(event) =>
+                      updateOption(option.id, event.target.value)
+                    }
+                    className="rounded-l-md border block flex-1 min-w-0 w-full text-sm p-1 bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-900 focus:ring-gray-500 focus:border-gray-500"
+                    placeholder="Enter a option"
+                  />
+                  <button
+                    onClick={() => removeOption(option.id)}
+                    className="px-3 text-sm border border-l-0 rounded-r-md bg-gray-300 text-gray-900 border-gray-600"
+                  >
+                    <DeleteIcon className={"w-5 h-5"} />
+                  </button>
+                </div>
+              ))}
             </div>
-          ))}
+          ) : (
+            <div className="text-black flex flex-col">
+              <span>There are no options.</span>
+              <span className="bg-red-200 border border-red-600 px-2 rounded-md text-red-600">
+                This question won't be added to form unless you add options
+              </span>
+            </div>
+          )}
         </div>
         <div className=" pt-2"></div>
       </div>

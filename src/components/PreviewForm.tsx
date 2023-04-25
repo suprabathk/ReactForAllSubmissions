@@ -112,6 +112,15 @@ export function PreviewForm(props: { id: number }) {
   useEffect(() => {
     setCurrentQuestion(currentFormData.formFields[currentQuestionIndex]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    let ans: fieldAnswer[] = [];
+    if (currentFormData.formFields[currentQuestionIndex]) {
+      ans = answers.filter(
+        (answer) =>
+          answer.id === currentFormData.formFields[currentQuestionIndex].id
+      );
+    }
+    ans.length > 0 && setCurrentAnswer(ans[0].ans);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestionIndex]);
 
   useEffect(() => {
@@ -132,6 +141,7 @@ export function PreviewForm(props: { id: number }) {
       });
     setCurrentAnswer("");
     setCurrentQuestionIndex(currentQuestionIndex + 1);
+    setCurrentAnswer("");
   };
 
   const prevQuestionCB = () => {
@@ -203,6 +213,7 @@ export function PreviewForm(props: { id: number }) {
                           type="radio"
                           name={`${currentQuestion.id}`}
                           value={option.option}
+                          checked={currentAnswer === option.option}
                           onChange={(e) => setCurrentAnswer(e.target.value)}
                         />
                       </div>

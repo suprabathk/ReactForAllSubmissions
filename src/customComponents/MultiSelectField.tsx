@@ -21,7 +21,7 @@ export function MultiSelectField({
   };
 
   useEffect(() => {
-    setCurrentAnswerCB([]);
+    if (!Array.isArray(currentAnswer)) setCurrentAnswerCB([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

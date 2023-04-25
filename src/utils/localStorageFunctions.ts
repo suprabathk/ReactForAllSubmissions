@@ -8,8 +8,23 @@ export const saveLocalForms: (localForms: formData[]) => void = (
 
 export const saveFormData = (currentState: formData) => {
   const localForms = getLocalForms();
+  const currentValidatedState = {
+    ...currentState,
+    // eslint-disable-next-line array-callback-return
+    formFields: currentState.formFields.filter((field) => {
+      if (
+        field.kind === "dropdown" ||
+        field.kind === "multiselect" ||
+        field.kind === "radio"
+      ) {
+        return field.options.length > 0 && field.label !== "";
+      } else {
+        return field.label !== "";
+      }
+    }),
+  };
   const updatedLocalForms = localForms.map((form) =>
-    form.id === currentState.id ? currentState : form
+    form.id === currentState.id ? currentValidatedState : form
   );
   saveLocalForms(updatedLocalForms);
 };

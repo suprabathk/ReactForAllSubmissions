@@ -218,6 +218,7 @@ export default function Form(props: { id: number }) {
   );
   const [newLabel, setNewLabel] = useState("");
   const [newKind, setNewKind] = useState<formField["kind"]>("text");
+  const [error, setError] = useState(false);
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -258,7 +259,7 @@ export default function Form(props: { id: number }) {
       </div>
       <div>
         {fieldState.formFields.length > 0 ? (
-          <div>
+          <div className="flex flex-col">
             {
               // eslint-disable-next-line array-callback-return
               fieldState.formFields.map((field) => {
@@ -267,6 +268,11 @@ export default function Form(props: { id: number }) {
                     return (
                       <div className="my-1" key={field.id}>
                         <h3 className="text-md font-semibold">Text Field</h3>
+                        {field.label === "" && (
+                          <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
+                            Label cannot be empty.
+                          </div>
+                        )}
                         <TextField
                           key={field.id}
                           id={field.id}
@@ -301,6 +307,11 @@ export default function Form(props: { id: number }) {
                     return (
                       <div className="my-1" key={field.id}>
                         <h3 className="text-md font-semibold">Text Area</h3>
+                        {field.label === "" && (
+                          <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
+                            Label cannot be empty.
+                          </div>
+                        )}
                         <TextArea
                           key={field.id}
                           id={field.id}
@@ -327,6 +338,11 @@ export default function Form(props: { id: number }) {
                     return (
                       <div className="my-1" key={field.id}>
                         <h3 className="text-md font-semibold">Dropdown</h3>
+                        {field.label === "" && (
+                          <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
+                            Label cannot be empty.
+                          </div>
+                        )}
                         <DropdownField
                           id={field.id}
                           label={field.label}
@@ -360,6 +376,11 @@ export default function Form(props: { id: number }) {
                     return (
                       <div className="my-1" key={field.id}>
                         <h3 className="text-md font-semibold">Multiselect</h3>
+                        {field.label === "" && (
+                          <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
+                            Label cannot be empty.
+                          </div>
+                        )}
                         <MultiSelectField
                           id={field.id}
                           label={field.label}
@@ -393,6 +414,11 @@ export default function Form(props: { id: number }) {
                     return (
                       <div className="my-1" key={field.id}>
                         <h3 className="text-md font-semibold">Radio button</h3>
+                        {field.label === "" && (
+                          <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
+                            Label cannot be empty.
+                          </div>
+                        )}
                         <RadioButtonField
                           id={field.id}
                           label={field.label}
@@ -438,11 +464,16 @@ export default function Form(props: { id: number }) {
       <div className="w-full pt-2">
         <label
           htmlFor="add-field"
-          className="block mb-2 text-sm font-medium text-gray-700"
+          className="block mb-1 text-sm font-medium text-gray-700"
         >
           Add field
         </label>
-        <div className="flex">
+        {error && (
+          <div className="bg-red-200 border border-red-600 px-2 rounded-md text-red-600">
+            Label cannot be empty.
+          </div>
+        )}
+        <div className="flex mt-1">
           <select
             value={newKind}
             onChange={(event) => {
