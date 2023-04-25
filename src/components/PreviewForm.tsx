@@ -91,6 +91,15 @@ export function PreviewForm(props: { id: number }) {
 
   useEffect(() => {
     setCurrentQuestion(currentFormData.formFields[currentQuestionIndex]);
+    let ans: fieldAnswer[] = [];
+    if (currentFormData.formFields[currentQuestionIndex]) {
+      ans = answers.filter(
+        (answer) =>
+          answer.id === currentFormData.formFields[currentQuestionIndex].id
+      );
+    }
+    ans.length > 0 && setCurrentAnswer(ans[0].ans);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentFormData.formFields, currentQuestionIndex]);
 
   useEffect(() => {
@@ -102,7 +111,23 @@ export function PreviewForm(props: { id: number }) {
   }, [currentFormData.formFields, currentQuestion]);
 
   const submitandNextCB = (questionID: number, ans: string | string[]) => {
-    if (ans)
+    let submitAnswer = true;
+    answers.forEach((answer) => {
+      if (answer.id === questionID) {
+        submitAnswer = false;
+        if (answer.ans !== ans) {
+          setAnswers(
+            answers.map((answer) => {
+              return {
+                ...answer,
+                ans: answer.id === questionID ? ans : answer.ans,
+              };
+            })
+          );
+        }
+      }
+    });
+    if (ans && submitAnswer)
       setAnswers([
         ...answers,
         {
@@ -110,8 +135,8 @@ export function PreviewForm(props: { id: number }) {
           ans: ans,
         },
       ]);
-    setCurrentAnswer("");
     setCurrentQuestionIndex(currentQuestionIndex + 1);
+    setCurrentAnswer("");
   };
 
   const prevQuestionCB = () => {
@@ -183,6 +208,7 @@ export function PreviewForm(props: { id: number }) {
                           type="radio"
                           name={`${currentQuestion.id}`}
                           value={option.option}
+                          checked={currentAnswer === option.option}
                           onChange={(e) => setCurrentAnswer(e.target.value)}
                         />
                       </div>
