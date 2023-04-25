@@ -75,16 +75,27 @@ type addAnswerAction = {
 };
 type answerActions = addAnswerAction;
 
-function reducer(state: fieldAnswer[], action: answerActions) {
+function reducer(state: fieldAnswer[], action: answerActions): fieldAnswer[] {
   switch (action.type) {
     case "add_answer":
-      return [
+      let newState = [
         ...state,
         {
           id: action.questionID,
           ans: action.ans,
         },
       ];
+      state.forEach((answer) => {
+        if (answer.id === action.questionID) {
+          if (answer.ans !== action.ans) {
+            newState = state.map((answer) => ({
+              ...answer,
+              ans: answer.id === action.questionID ? action.ans : answer.ans,
+            }));
+          }
+        }
+      });
+      return newState;
   }
 }
 
@@ -111,7 +122,6 @@ export function PreviewForm(props: { id: number }) {
 
   useEffect(() => {
     setCurrentQuestion(currentFormData.formFields[currentQuestionIndex]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     let ans: fieldAnswer[] = [];
     if (currentFormData.formFields[currentQuestionIndex]) {
       ans = answers.filter(
@@ -139,7 +149,6 @@ export function PreviewForm(props: { id: number }) {
         questionID: questionID,
         ans: ans,
       });
-    setCurrentAnswer("");
     setCurrentQuestionIndex(currentQuestionIndex + 1);
     setCurrentAnswer("");
   };

@@ -56,53 +56,47 @@ const initialFormFields: formField[] = [
 ];
 
 function getNewField(kind: formField["kind"], label: string): formField {
-  if (kind === "text") {
-    return {
-      kind: kind,
-      id: Number(new Date()),
-      label: label,
-      fieldType: "text",
-      value: "",
-    };
-  } else if (kind === "textarea") {
-    return {
-      kind: kind,
-      id: Number(new Date()),
-      label: label,
-      value: "",
-    };
-  } else if (kind === "dropdown") {
-    return {
-      kind: kind,
-      id: Number(new Date()),
-      label: label,
-      options: [{ id: Number(new Date()), option: "" }],
-      value: "",
-    };
-  } else if (kind === "multiselect") {
-    return {
-      kind: kind,
-      id: Number(new Date()),
-      label: label,
-      options: [{ id: Number(new Date()), option: "" }],
-      value: [],
-    };
-  } else if (kind === "radio") {
-    return {
-      kind: kind,
-      id: Number(new Date()),
-      label: label,
-      options: [{ id: Number(new Date()), option: "" }],
-      value: "",
-    };
+  switch (kind) {
+    case "text":
+      return {
+        kind: kind,
+        id: Number(new Date()),
+        label: label,
+        fieldType: "text",
+        value: "",
+      };
+    case "textarea":
+      return {
+        kind: kind,
+        id: Number(new Date()),
+        label: label,
+        value: "",
+      };
+    case "dropdown":
+      return {
+        kind: kind,
+        id: Number(new Date()),
+        label: label,
+        options: [],
+        value: "",
+      };
+    case "multiselect":
+      return {
+        kind: kind,
+        id: Number(new Date()),
+        label: label,
+        options: [],
+        value: [],
+      };
+    case "radio":
+      return {
+        kind: kind,
+        id: Number(new Date()),
+        label: label,
+        options: [],
+        value: "",
+      };
   }
-  return {
-    kind: kind,
-    id: Number(new Date()),
-    label: label,
-    fieldType: "text",
-    value: "",
-  };
 }
 
 type AddAction = {
@@ -509,6 +503,10 @@ export default function Form(props: { id: number }) {
             onClick={(_) => {
               setNewKind("text");
               setNewLabel("");
+              if (newLabel === "") {
+                return setError(true);
+              }
+              setError(false);
               return dispatch({
                 type: "add_field",
                 label: newLabel,
