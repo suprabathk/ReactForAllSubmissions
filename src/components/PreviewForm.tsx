@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { getFormData } from "../utils/localStorageFunctions";
-import { fieldAnswer } from "../types/types";
+import { fieldAnswer, formField } from "../types/types";
 import {
   BackIcon,
   CompleteIcon,
@@ -103,7 +103,7 @@ export function PreviewForm(props: { id: number }) {
   const currentFormData = getFormData(props.id);
   const [answers, dispatch] = useReducer(reducer, []);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState(
+  const [currentQuestion, setCurrentQuestion] = useState<formField>(
     currentFormData.formFields[0]
   );
   const [isLastQuestion, setIsLastQuestion] = useState(
@@ -134,11 +134,15 @@ export function PreviewForm(props: { id: number }) {
   }, [currentQuestionIndex]);
 
   useEffect(() => {
-    setIsLastQuestion(
-      currentFormData.formFields[currentFormData.formFields.length - 1] ===
-        currentQuestion
-    );
-    setIsFirstQuestion(currentFormData.formFields[0] === currentQuestion);
+    if (currentQuestion) {
+      setIsLastQuestion(
+        currentFormData.formFields[currentFormData.formFields.length - 1].id ===
+          currentQuestion.id
+      );
+      setIsFirstQuestion(
+        currentFormData.formFields[0].id === currentQuestion.id
+      );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestion]);
 
