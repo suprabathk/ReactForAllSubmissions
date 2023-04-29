@@ -160,6 +160,9 @@ function reducer(state: formData, action: formActions): formData {
         title: action.title,
       };
     case "update_options":
+      const validatedOptions = action.options.filter(
+        (opt) => opt.option !== ""
+      );
       return {
         ...state,
         formFields: state.formFields.map((field) => {
@@ -171,7 +174,7 @@ function reducer(state: formData, action: formActions): formData {
           ) {
             return {
               ...field,
-              options: action.options,
+              options: validatedOptions,
             };
           }
           return field;
