@@ -196,6 +196,7 @@ export default function Form(props: { id: number }) {
   };
 
   const updateOptions = (id: number, options: fieldOption[]) => {
+    const validatedOptions = options.filter((opt) => opt.option !== "");
     setFieldState({
       ...fieldState,
       formFields: fieldState.formFields.map((field) => {
@@ -207,7 +208,7 @@ export default function Form(props: { id: number }) {
         ) {
           return {
             ...field,
-            options: options,
+            options: validatedOptions,
           };
         }
         return field;
