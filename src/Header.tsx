@@ -1,7 +1,8 @@
 import { ActiveLink } from "raviger";
 import logo from "./logo.svg";
+import { User } from "./types/userTypes";
 
-export default function Header(props: { title: string }) {
+export default function Header(props: { currentUser: User }) {
   return (
     <div className="flex gap-2 justify-between items-center">
       <img
@@ -14,16 +15,41 @@ export default function Header(props: { title: string }) {
         {[
           { page: "Home", url: "/" },
           { page: "About", url: "/about" },
-        ].map((link) => (
-          <ActiveLink
-            href={link.url}
-            key={link.url}
-            className="p-2 m-2 uppercase"
-            exactActiveClass="text-black"
-          >
-            {link.page}
-          </ActiveLink>
-        ))}
+          ...(props.currentUser?.username.length > 0
+            ? [
+                {
+                  page: "Logout",
+                  onClick: () => {
+                    localStorage.removeItem("token");
+                    window.location.reload();
+                  },
+                },
+              ]
+            : [{ page: "Login", url: "/login" }]),
+        ].map((link) => {
+          if (link.url) {
+            return (
+              <ActiveLink
+                href={link.url}
+                key={link.page}
+                className="p-2 m-2 uppercase"
+                exactActiveClass="text-black"
+              >
+                {link.page}
+              </ActiveLink>
+            );
+          } else {
+            return (
+              <button
+                onClick={link.onClick}
+                key={link.page}
+                className="p-2 m-2 uppercase"
+              >
+                {link.page}
+              </button>
+            );
+          }
+        })}
       </div>
     </div>
   );

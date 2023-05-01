@@ -2,11 +2,20 @@ import React, { useEffect, useState } from "react";
 import { DeleteIcon, PlusIcon, PreviewIcon, SearchIcon } from "../AppIcons";
 import { Link, useQueryParams } from "raviger";
 import { getLocalForms, saveLocalForms } from "../utils/localStorageFunctions";
+import { formData } from "../types/formTypes";
+import Modal from "./common/Modal";
+import CreateForm from "./CreateForm";
+import { listForms } from "../utils/apiUtils";
+
+const fetchForms = (setFormDataCB: (value: formData[]) => void) => {
+  listForms().then((data) => setFormDataCB(data));
+};
 
 export default function Home() {
   const [{ search }, setQuery] = useQueryParams();
   const [searchString, setSearchString] = useState("");
   const [formData, setFormData] = useState(getLocalForms());
+  const [newForm, setNewForm] = useState(false);
 
   const deleteLocalForm = (id: number) => {
     const localForms = getLocalForms();
@@ -15,6 +24,7 @@ export default function Home() {
   };
 
   useEffect(() => saveLocalForms(formData), [formData]);
+  useEffect(() => fetchForms(setFormData), []);
 
   return (
     <div className="flex flex-col justify-center text-gray-700">
@@ -53,13 +63,13 @@ export default function Home() {
       </form>
       <div className="flex gap-2 items-center justify-between mt-4">
         <h1 className="font-bold text-2xl">Forms</h1>
-        <Link
+        <button
           className="flex items-center gap-1 text-center bg-gray-100 px-2 rounded-lg my-2 border font-semibold transition-all border-gray-400 text-gray-700"
-          href={"/form/0"}
+          onClick={() => setNewForm(true)}
         >
           <PlusIcon className={"w-5 h-5"} />
           Create Form
-        </Link>
+        </button>
       </div>
       {formData.length > 0 && (
         <div className="flex-col flex justify-center items-center">
@@ -74,7 +84,7 @@ export default function Home() {
                   className="flex flex-col text-start rounded-none border border-r-0 flex-1 min-w-0 w-full text-sm px-2.5 py-1 bg-gray-100 rounded-l-md border-gray-600 placeholder-gray-400 text-gray-700 focus:ring-gray-500 focus:border-gray-500"
                 >
                   <h2 className="font-medium text-lg">{form.title}</h2>
-                  <h2 className="">{form.formFields.length} fields</h2>
+                  {/* <h2 className="">{form.formFields.length} fields</h2> */}
                 </Link>
                 <Link
                   href={`/preview/${form.id}`}
@@ -101,6 +111,9 @@ export default function Home() {
       {formData.length === 0 && (
         <p className="text-gray-700 mt-2">There are no forms created!</p>
       )}
+      <Modal open={newForm} closeCB={() => setNewForm(false)}>
+        <CreateForm />
+      </Modal>
     </div>
   );
 }

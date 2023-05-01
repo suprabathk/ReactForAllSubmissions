@@ -1,4 +1,4 @@
-import { formData, formField } from "../types/types";
+import { formData, formField } from "../types/formTypes";
 
 export const saveLocalForms: (localForms: formData[]) => void = (
   localForms: formData[]

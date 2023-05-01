@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DownArrow } from "../AppIcons";
-import { MultiSelect } from "../types/types";
+import { MultiSelect } from "../types/formTypes";
 
 export function MultiSelectField({
   currentAnswer,

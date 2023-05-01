@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { getFormData } from "../utils/localStorageFunctions";
-import { fieldAnswer, formField } from "../types/types";
+import { fieldAnswer, formField } from "../types/formTypes";
 import {
   BackIcon,
   CompleteIcon,

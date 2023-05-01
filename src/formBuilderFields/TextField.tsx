@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DeleteIcon } from "../AppIcons";
-import { textFieldTypes } from "../types/types";
+import { textFieldTypes } from "../types/formTypes";
 
 export function TextField(props: {
   id: number;

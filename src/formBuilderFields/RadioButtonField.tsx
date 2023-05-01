@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DeleteIcon, PlusIcon } from "../AppIcons";
-import { fieldOption } from "../types/types";
+import { fieldOption } from "../types/formTypes";
 
 export function RadioButtonField(props: {
   id: number;

@@ -6,7 +6,7 @@ import {
   fieldOption,
   textFieldTypes,
   formData,
-} from "../types/types";
+} from "../types/formTypes";
 import { Link, navigate } from "raviger";
 import {
   getInitialFormData,
