@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { getFormData } from "../utils/localStorageFunctions";
-import { fieldAnswer, formField } from "../types/formTypes";
+import { fieldAnswer } from "../types/formTypes";
 import {
   BackIcon,
   CompleteIcon,
@@ -11,6 +11,10 @@ import {
 } from "../AppIcons";
 import { MultiSelectField } from "../customComponents/MultiSelectField";
 import { Link } from "raviger";
+import {
+  answerReducer,
+  questionReducer,
+} from "../reducers/previewFormReducers";
 
 export function NextPrevAndSubmitButton({
   isFirstQuestion,
@@ -68,43 +72,18 @@ export function NextPrevAndSubmitButton({
   );
 }
 
-type addAnswerAction = {
-  type: "add_answer";
-  questionID: number;
-  ans: string | string[];
-};
-type answerActions = addAnswerAction;
-
-function reducer(state: fieldAnswer[], action: answerActions): fieldAnswer[] {
-  switch (action.type) {
-    case "add_answer":
-      let newState = [
-        ...state,
-        {
-          id: action.questionID,
-          ans: action.ans,
-        },
-      ];
-      state.forEach((answer) => {
-        if (answer.id === action.questionID) {
-          if (answer.ans !== action.ans) {
-            newState = state.map((answer) => ({
-              ...answer,
-              ans: answer.id === action.questionID ? action.ans : answer.ans,
-            }));
-          }
-        }
-      });
-      return newState;
-  }
-}
-
 export function PreviewForm(props: { id: number }) {
   const currentFormData = getFormData(props.id);
-  const [answers, dispatch] = useReducer(reducer, []);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState<formField>(
+  const [answers, dispatchAnswer] = useReducer(answerReducer, []);
+  const [currentQuestion, dispatchQuestion] = useReducer(
+    questionReducer,
     currentFormData.formFields[0]
+  );
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentAnswer, setCurrentAnswer] = useState<string | string[]>(
+    currentQuestionIndex < currentFormData.formFields.length
+      ? currentQuestion.value
+      : ""
   );
   const [isLastQuestion, setIsLastQuestion] = useState(
     currentFormData.formFields[currentFormData.formFields.length - 1] ===
@@ -113,15 +92,12 @@ export function PreviewForm(props: { id: number }) {
   const [isFirstQuestion, setIsFirstQuestion] = useState(
     currentFormData.formFields[0] === currentQuestion
   );
-  const [currentAnswer, setCurrentAnswer] = useState<string | string[]>(
-    currentQuestionIndex < currentFormData.formFields.length
-      ? currentQuestion.value
-      : ""
-  );
+
+  const getIndexQuestion = (index: number) => currentFormData.formFields[index];
+
   useEffect(() => console.log(answers), [answers]);
 
   useEffect(() => {
-    setCurrentQuestion(currentFormData.formFields[currentQuestionIndex]);
     let ans: fieldAnswer[] = [];
     if (currentFormData.formFields[currentQuestionIndex]) {
       ans = answers.filter(
@@ -130,10 +106,7 @@ export function PreviewForm(props: { id: number }) {
       );
     }
     ans.length > 0 && setCurrentAnswer(ans[0].ans);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentQuestionIndex]);
 
-  useEffect(() => {
     if (currentQuestion) {
       setIsLastQuestion(
         currentFormData.formFields[currentFormData.formFields.length - 1].id ===
@@ -147,19 +120,30 @@ export function PreviewForm(props: { id: number }) {
   }, [currentQuestion]);
 
   const submitandNextCB = (questionID: number, ans: string | string[]) => {
-    if (ans)
-      dispatch({
-        type: "add_answer",
-        questionID: questionID,
-        ans: ans,
-      });
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
+    dispatchAnswer({
+      type: "add_answer",
+      questionID: questionID,
+      ans: ans,
+    });
     setCurrentAnswer("");
+    dispatchQuestion({
+      type: "update_question",
+      index: currentQuestionIndex,
+      setCurrentIndexCB: setCurrentQuestionIndex,
+      getIndexQuestionCB: getIndexQuestion,
+      kind: "next",
+    });
   };
 
   const prevQuestionCB = () => {
     setCurrentAnswer("");
-    setCurrentQuestionIndex(currentQuestionIndex - 1);
+    dispatchQuestion({
+      type: "update_question",
+      index: currentQuestionIndex,
+      setCurrentIndexCB: setCurrentQuestionIndex,
+      getIndexQuestionCB: getIndexQuestion,
+      kind: "prev",
+    });
   };
 
   return (
