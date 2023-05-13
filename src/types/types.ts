@@ -61,3 +61,8 @@ export type fieldOption = {
   id: number;
   option: string;
 };
+
+export type currentlyPreviewedQuestion = {
+  index: number;
+  currentQuestion: formField;
+};
