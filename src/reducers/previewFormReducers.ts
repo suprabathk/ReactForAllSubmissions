@@ -1,4 +1,8 @@
-import { fieldAnswer, formField } from "../types/formTypes";
+import {
+  currentlyPreviewedQuestion,
+  fieldAnswer,
+  formField,
+} from "../types/formTypes";
 
 type addAnswerAction = {
   type: "add_answer";
@@ -44,26 +48,28 @@ type updateQuestionKind = "next" | "prev";
 type updateQuestion = {
   type: "update_question";
   kind: updateQuestionKind;
-  index: number;
-  setCurrentIndexCB: (index: number) => void;
   getIndexQuestionCB: (index: number) => formField;
 };
 
 type questionActions = updateQuestion;
 
 export function questionReducer(
-  state: formField,
+  state: currentlyPreviewedQuestion,
   action: questionActions
-): formField {
+): currentlyPreviewedQuestion {
   switch (action.type) {
     case "update_question":
       switch (action.kind) {
         case "next":
-          action.setCurrentIndexCB(action.index + 1);
-          return action.getIndexQuestionCB(action.index + 1);
+          return {
+            index: state.index + 1,
+            currentQuestion: action.getIndexQuestionCB(state.index + 1),
+          };
         case "prev":
-          action.setCurrentIndexCB(action.index - 1);
-          return action.getIndexQuestionCB(action.index - 1);
+          return {
+            index: state.index - 1,
+            currentQuestion: action.getIndexQuestionCB(state.index - 1),
+          };
       }
   }
 }

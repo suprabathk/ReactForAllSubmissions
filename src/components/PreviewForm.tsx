@@ -75,23 +75,18 @@ export function NextPrevAndSubmitButton({
 export function PreviewForm(props: { id: number }) {
   const currentFormData = getFormData(props.id);
   const [answers, dispatchAnswer] = useReducer(answerReducer, []);
-  const [currentQuestion, dispatchQuestion] = useReducer(
-    questionReducer,
-    currentFormData.formFields[0]
-  );
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentQuestion, dispatchQuestion] = useReducer(questionReducer, {
+    index: 0,
+    currentQuestion: currentFormData.formFields[0],
+  });
   const [currentAnswer, setCurrentAnswer] = useState<string | string[]>(
-    currentQuestionIndex < currentFormData.formFields.length
-      ? currentQuestion.value
+    currentQuestion.index < currentFormData.formFields.length
+      ? currentQuestion.currentQuestion.value
       : ""
   );
-  const [isLastQuestion, setIsLastQuestion] = useState(
-    currentFormData.formFields[currentFormData.formFields.length - 1] ===
-      currentQuestion
-  );
-  const [isFirstQuestion, setIsFirstQuestion] = useState(
-    currentFormData.formFields[0] === currentQuestion
-  );
+  const isFirstQuestion = currentQuestion.index === 0;
+  const isLastQuestion =
+    currentQuestion.index === currentFormData.formFields.length - 1;
 
   const getIndexQuestion = (index: number) => currentFormData.formFields[index];
 
@@ -99,23 +94,13 @@ export function PreviewForm(props: { id: number }) {
 
   useEffect(() => {
     let ans: fieldAnswer[] = [];
-    if (currentFormData.formFields[currentQuestionIndex]) {
+    if (currentFormData.formFields[currentQuestion.index]) {
       ans = answers.filter(
         (answer) =>
-          answer.id === currentFormData.formFields[currentQuestionIndex].id
+          answer.id === currentFormData.formFields[currentQuestion.index].id
       );
     }
     ans.length > 0 && setCurrentAnswer(ans[0].ans);
-
-    if (currentQuestion) {
-      setIsLastQuestion(
-        currentFormData.formFields[currentFormData.formFields.length - 1].id ===
-          currentQuestion.id
-      );
-      setIsFirstQuestion(
-        currentFormData.formFields[0].id === currentQuestion.id
-      );
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestion]);
 
@@ -128,8 +113,6 @@ export function PreviewForm(props: { id: number }) {
     setCurrentAnswer("");
     dispatchQuestion({
       type: "update_question",
-      index: currentQuestionIndex,
-      setCurrentIndexCB: setCurrentQuestionIndex,
       getIndexQuestionCB: getIndexQuestion,
       kind: "next",
     });
@@ -139,8 +122,6 @@ export function PreviewForm(props: { id: number }) {
     setCurrentAnswer("");
     dispatchQuestion({
       type: "update_question",
-      index: currentQuestionIndex,
-      setCurrentIndexCB: setCurrentQuestionIndex,
       getIndexQuestionCB: getIndexQuestion,
       kind: "prev",
     });
@@ -150,37 +131,37 @@ export function PreviewForm(props: { id: number }) {
     <div className="w-full text-gray-700">
       {currentFormData.formFields.length !== 0 ? (
         <div>
-          {currentQuestionIndex < currentFormData.formFields.length ? (
+          {currentQuestion.index < currentFormData.formFields.length ? (
             <div>
               <h2 className=" font-extrabold mt-3 mb-6 text-3xl">
                 {currentFormData.title}
               </h2>
               <label
                 className="font-semibold text-2xl"
-                htmlFor={`q-${currentQuestion.id}`}
+                htmlFor={`q-${currentQuestion.currentQuestion.id}`}
               >
-                {currentQuestion.label}
+                {currentQuestion.currentQuestion.label}
               </label>
               <div className="flex flex-col gap-2 mt-2">
-                {currentQuestion.kind === "text" && (
+                {currentQuestion.currentQuestion.kind === "text" && (
                   <input
-                    type={currentQuestion.fieldType}
-                    id={`q-${currentQuestion.id}`}
+                    type={currentQuestion.currentQuestion.fieldType}
+                    id={`q-${currentQuestion.currentQuestion.id}`}
                     value={currentAnswer}
                     onChange={(event) => setCurrentAnswer(event.target.value)}
                     className="rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500"
                     placeholder="Enter your answer"
                   />
                 )}
-                {currentQuestion.kind === "dropdown" && (
+                {currentQuestion.currentQuestion.kind === "dropdown" && (
                   <select
-                    id={`q-${currentQuestion.id}`}
+                    id={`q-${currentQuestion.currentQuestion.id}`}
                     value={currentAnswer}
                     className="rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500"
                     onChange={(e) => setCurrentAnswer(e.target.value)}
                   >
                     <option value="">Select a value</option>
-                    {currentQuestion.options.map((option) => (
+                    {currentQuestion.currentQuestion.options.map((option) => (
                       <option
                         key={option.id}
                         className="my-2"
@@ -191,16 +172,16 @@ export function PreviewForm(props: { id: number }) {
                     ))}
                   </select>
                 )}
-                {currentQuestion.kind === "multiselect" && (
+                {currentQuestion.currentQuestion.kind === "multiselect" && (
                   <MultiSelectField
                     currentAnswer={currentAnswer}
-                    currentQuestion={currentQuestion}
+                    currentQuestion={currentQuestion.currentQuestion}
                     setCurrentAnswerCB={setCurrentAnswer}
                   />
                 )}
-                {currentQuestion.kind === "radio" && (
+                {currentQuestion.currentQuestion.kind === "radio" && (
                   <div className="mb-2">
-                    {currentQuestion.options.map((option) => (
+                    {currentQuestion.currentQuestion.options.map((option) => (
                       <div
                         key={option.id}
                         className="ml-4 flex items-center gap-2"
@@ -208,7 +189,7 @@ export function PreviewForm(props: { id: number }) {
                         <label>{option.option}</label>
                         <input
                           type="radio"
-                          name={`${currentQuestion.id}`}
+                          name={`${currentQuestion.currentQuestion.id}`}
                           value={option.option}
                           checked={currentAnswer === option.option}
                           onChange={(e) => setCurrentAnswer(e.target.value)}
@@ -217,9 +198,9 @@ export function PreviewForm(props: { id: number }) {
                     ))}
                   </div>
                 )}
-                {currentQuestion.kind === "textarea" && (
+                {currentQuestion.currentQuestion.kind === "textarea" && (
                   <textarea
-                    id={`q-${currentQuestion.id}`}
+                    id={`q-${currentQuestion.currentQuestion.id}`}
                     value={currentAnswer}
                     className="rounded-md border block w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500"
                     onChange={(e) => setCurrentAnswer(e.target.value)}
@@ -229,7 +210,10 @@ export function PreviewForm(props: { id: number }) {
                   isFirstQuestion={isFirstQuestion}
                   isLastQuestion={isLastQuestion}
                   onNext={() =>
-                    submitandNextCB(currentQuestion.id, currentAnswer)
+                    submitandNextCB(
+                      currentQuestion.currentQuestion.id,
+                      currentAnswer
+                    )
                   }
                   onPrev={() => prevQuestionCB()}
                 />
