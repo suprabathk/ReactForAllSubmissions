@@ -74,7 +74,7 @@ export type formActions =
 
 function getNewField(kind: formField["kind"], label: string): formField {
   switch (kind) {
-    case "text":
+    case "TEXT":
       return {
         kind: kind,
         id: Number(new Date()),
@@ -82,14 +82,14 @@ function getNewField(kind: formField["kind"], label: string): formField {
         fieldType: "text",
         value: "",
       };
-    case "textarea":
+    case "TEXTAREA":
       return {
         kind: kind,
         id: Number(new Date()),
         label: label,
         value: "",
       };
-    case "dropdown":
+    case "DROPDOWN":
       return {
         kind: kind,
         id: Number(new Date()),
@@ -97,7 +97,7 @@ function getNewField(kind: formField["kind"], label: string): formField {
         options: [],
         value: "",
       };
-    case "multiselect":
+    case "MULTISELECT":
       return {
         kind: kind,
         id: Number(new Date()),
@@ -105,7 +105,7 @@ function getNewField(kind: formField["kind"], label: string): formField {
         options: [],
         value: [],
       };
-    case "radio":
+    case "RADIO":
       return {
         kind: kind,
         id: Number(new Date()),
@@ -129,6 +129,7 @@ export function reducer(state: formData, action: formActions): formData {
       addFieldCall(state.id, {
         label: action.label,
         kind: action.kind,
+        options: [],
       });
       const newField = getNewField(action.kind, action.label);
       return {
@@ -153,17 +154,17 @@ export function reducer(state: formData, action: formActions): formData {
         description: action.description,
       };
     case "update_options":
-      const validatedOptions = action.options.filter(
-        (opt) => opt.option !== ""
-      );
+      const validatedOptions = action.options
+        ? action.options.filter((opt) => opt.option !== "")
+        : [];
       return {
         ...state,
         formFields: state.formFields.map((field) => {
           if (
             action.id === field.id &&
-            (field.kind === "radio" ||
-              field.kind === "dropdown" ||
-              field.kind === "multiselect")
+            (field.kind === "RADIO" ||
+              field.kind === "DROPDOWN" ||
+              field.kind === "MULTISELECT")
           ) {
             return {
               ...field,

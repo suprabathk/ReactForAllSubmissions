@@ -21,7 +21,7 @@ export const validateForm = (form: Form) => {
 export type textFieldTypes = "text" | "email" | "date" | "tel" | "time";
 
 type TextField = {
-  kind: "text";
+  kind: "TEXT";
   id: number;
   label: string;
   fieldType: textFieldTypes;
@@ -29,7 +29,7 @@ type TextField = {
 };
 
 type DropdownField = {
-  kind: "dropdown";
+  kind: "DROPDOWN";
   id: number;
   label: string;
   options: fieldOption[];
@@ -37,7 +37,7 @@ type DropdownField = {
 };
 
 export type MultiSelect = {
-  kind: "multiselect";
+  kind: "MULTISELECT";
   id: number;
   label: string;
   options: fieldOption[];
@@ -45,14 +45,14 @@ export type MultiSelect = {
 };
 
 type TextArea = {
-  kind: "textarea";
+  kind: "TEXTAREA";
   id: number;
   label: string;
   value: string;
 };
 
 export type RadioButton = {
-  kind: "radio";
+  kind: "RADIO";
   id: number;
   label: string;
   value: string;

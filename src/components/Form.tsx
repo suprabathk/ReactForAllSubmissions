@@ -16,35 +16,35 @@ import { fetchFormData, fetchFormFields } from "../utils/apiUtils";
 
 const initialFormFields: formField[] = [
   {
-    kind: "text",
+    kind: "TEXT",
     id: 1,
     label: "First Name",
     fieldType: "text",
     value: "",
   },
   {
-    kind: "text",
+    kind: "TEXT",
     id: 2,
     label: "Last Name",
     fieldType: "text",
     value: "",
   },
   {
-    kind: "text",
+    kind: "TEXT",
     id: 3,
     label: "Email",
     fieldType: "text",
     value: "",
   },
   {
-    kind: "text",
+    kind: "TEXT",
     id: 4,
     label: "Date of birth",
     fieldType: "date",
     value: "",
   },
   {
-    kind: "text",
+    kind: "TEXT",
     id: 5,
     label: "Phone number",
     fieldType: "tel",
@@ -74,8 +74,8 @@ export default function Form(props: { id: number }) {
     getInitialFormData(props.id, initialFormFields)
   );
   const [newLabel, setNewLabel] = useState("");
-  const [newKind, setNewKind] = useState<formField["kind"]>("text");
-  const [error, setError] = useState(false);
+  const [newKind, setNewKind] = useState<formField["kind"]>("TEXT");
+  const [error, setError] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -88,15 +88,15 @@ export default function Form(props: { id: number }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    let timeout = setTimeout(() => {
-      saveFormData(fieldState);
-      console.log("Saved to local storage");
-    }, 500);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [fieldState]);
+  // useEffect(() => {
+  //   let timeout = setTimeout(() => {
+  //     saveFormData(fieldState);
+  //     console.log("Saved to local storage");
+  //   }, 500);
+  //   return () => {
+  //     clearTimeout(timeout);
+  //   };
+  // }, [fieldState]);
 
   return (
     <div className="flex flex-col gap-4 divide-y">
@@ -144,7 +144,7 @@ export default function Form(props: { id: number }) {
                 // eslint-disable-next-line array-callback-return
                 fieldState.formFields.map((field) => {
                   switch (field.kind) {
-                    case "text":
+                    case "TEXT":
                       return (
                         <div className="my-1" key={field.id}>
                           <h3 className="text-md font-semibold">Text Field</h3>
@@ -183,7 +183,7 @@ export default function Form(props: { id: number }) {
                           />
                         </div>
                       );
-                    case "textarea":
+                    case "TEXTAREA":
                       return (
                         <div className="my-1" key={field.id}>
                           <h3 className="text-md font-semibold">Text Area</h3>
@@ -214,7 +214,7 @@ export default function Form(props: { id: number }) {
                           />
                         </div>
                       );
-                    case "dropdown":
+                    case "DROPDOWN":
                       return (
                         <div className="my-1" key={field.id}>
                           <h3 className="text-md font-semibold">Dropdown</h3>
@@ -252,7 +252,7 @@ export default function Form(props: { id: number }) {
                           />
                         </div>
                       );
-                    case "multiselect":
+                    case "MULTISELECT":
                       return (
                         <div className="my-1" key={field.id}>
                           <h3 className="text-md font-semibold">Multiselect</h3>
@@ -290,7 +290,7 @@ export default function Form(props: { id: number }) {
                           />
                         </div>
                       );
-                    case "radio":
+                    case "RADIO":
                       return (
                         <div className="my-1" key={field.id}>
                           <h3 className="text-md font-semibold">
@@ -347,16 +347,16 @@ export default function Form(props: { id: number }) {
       <div className="w-full pt-2">
         <label
           htmlFor="add-field"
-          className="block mb-1 text-sm font-medium text-gray-700"
+          className="block mb-1 text-sm font-medium text-gray-700 w-full"
         >
           Add field
         </label>
         {error && (
           <div className="bg-red-200 border border-red-600 px-2 rounded-md text-red-600">
-            Label cannot be empty.
+            {error}
           </div>
         )}
-        <div className="flex mt-1">
+        <div className="flex mt-1 w-full">
           <select
             value={newKind}
             onChange={(event) => {
@@ -364,19 +364,19 @@ export default function Form(props: { id: number }) {
             }}
             className="items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-300 text-gray-700 border-gray-600"
           >
-            <option className="w-full bg-gray-300" value="text">
+            <option className="w-full bg-gray-300" value="TEXT">
               Text Field
             </option>
-            <option className="w-full bg-gray-300" value="textarea">
+            <option className="w-full bg-gray-300" value="TEXTAREA">
               Text Area
             </option>
-            <option className="w-full bg-gray-300" value="radio">
+            <option className="w-full bg-gray-300" value="RADIO">
               Radio button
             </option>
-            <option className="w-full bg-gray-300" value="dropdown">
+            <option className="w-full bg-gray-300" value="DROPDOWN">
               Dropdown
             </option>
-            <option className="w-full bg-gray-300" value="multiselect">
+            <option className="w-full bg-gray-300" value="MULTISELECT">
               Multi-Select
             </option>
           </select>
@@ -390,13 +390,12 @@ export default function Form(props: { id: number }) {
           />
           <button
             onClick={(_) => {
-              setNewKind("text");
-              setNewLabel("");
               if (newLabel === "") {
-                return setError(true);
+                return setError("Label cannot be empty");
               }
-              setError(false);
-              //Here
+              setError("");
+              setNewKind("TEXT");
+              setNewLabel("");
               return dispatch({
                 type: "add_field",
                 label: newLabel,

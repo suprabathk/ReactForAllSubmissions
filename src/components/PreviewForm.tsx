@@ -143,7 +143,7 @@ export function PreviewForm(props: { id: number }) {
                 {currentQuestion.currentQuestion.label}
               </label>
               <div className="flex flex-col gap-2 mt-2">
-                {currentQuestion.currentQuestion.kind === "text" && (
+                {currentQuestion.currentQuestion.kind === "TEXT" && (
                   <input
                     type={currentQuestion.currentQuestion.fieldType}
                     id={`q-${currentQuestion.currentQuestion.id}`}
@@ -153,7 +153,7 @@ export function PreviewForm(props: { id: number }) {
                     placeholder="Enter your answer"
                   />
                 )}
-                {currentQuestion.currentQuestion.kind === "dropdown" && (
+                {currentQuestion.currentQuestion.kind === "DROPDOWN" && (
                   <select
                     id={`q-${currentQuestion.currentQuestion.id}`}
                     value={currentAnswer}
@@ -172,14 +172,14 @@ export function PreviewForm(props: { id: number }) {
                     ))}
                   </select>
                 )}
-                {currentQuestion.currentQuestion.kind === "multiselect" && (
+                {currentQuestion.currentQuestion.kind === "MULTISELECT" && (
                   <MultiSelectField
                     currentAnswer={currentAnswer}
                     currentQuestion={currentQuestion.currentQuestion}
                     setCurrentAnswerCB={setCurrentAnswer}
                   />
                 )}
-                {currentQuestion.currentQuestion.kind === "radio" && (
+                {currentQuestion.currentQuestion.kind === "RADIO" && (
                   <div className="mb-2">
                     {currentQuestion.currentQuestion.options.map((option) => (
                       <div
@@ -198,7 +198,7 @@ export function PreviewForm(props: { id: number }) {
                     ))}
                   </div>
                 )}
-                {currentQuestion.currentQuestion.kind === "textarea" && (
+                {currentQuestion.currentQuestion.kind === "TEXTAREA" && (
                   <textarea
                     id={`q-${currentQuestion.currentQuestion.id}`}
                     value={currentAnswer}

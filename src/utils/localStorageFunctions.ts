@@ -14,9 +14,9 @@ export const saveFormData = (currentState: formData) => {
     formFields: currentState.formFields
       ? currentState.formFields.filter((field) => {
           if (
-            field.kind === "dropdown" ||
-            field.kind === "multiselect" ||
-            field.kind === "radio"
+            field.kind === "DROPDOWN" ||
+            field.kind === "MULTISELECT" ||
+            field.kind === "RADIO"
           ) {
             return field.options.length > 0 && field.label !== "";
           } else {
@@ -49,7 +49,7 @@ export const getInitialFormData: (
     }
   }
   const newForm = {
-    id: Number(new Date()),
+    id: id,
     title: "Untitled Form",
     formFields: initialFormFields,
   };

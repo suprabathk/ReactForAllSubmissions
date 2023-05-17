@@ -1,6 +1,5 @@
 import { PaginationParams } from "../types/common";
-import { formField } from "../types/formTypes";
-import { Form } from "../types/formTypes";
+import { Form, formField } from "../types/formTypes";
 
 const API_BASE_URL = "https://tsapi.coronasafe.live/api/";
 
@@ -64,7 +63,7 @@ export const listForms = (pageParams: PaginationParams) => {
 };
 
 export const fetchFormData = (formID: number) => {
-  return request(`forms/${formID}`, "GET");
+  return request(`forms/${formID}/`, "GET");
 };
 
 export const fetchFormFields = (formID: number) => {
@@ -73,9 +72,11 @@ export const fetchFormFields = (formID: number) => {
 
 export const addFieldCall = (
   formID: number,
-  fieldParams: { label: string; kind: formField["kind"] }
+  fieldParams: { label: string; kind: formField["kind"]; options?: [] }
 ) => {
-  return request(`forms/${formID}/fields`, "POST", fieldParams);
+  console.log(fieldParams);
+
+  return request(`forms/${formID}/fields/`, "POST", fieldParams);
 };
 
 export const deleteForm = (formID: number) => {

@@ -97,7 +97,7 @@ export function RadioButtonField(props: {
             </button>
           </div>
 
-          {options.length > 0 ? (
+          {options && options.length > 0 ? (
             <div>
               {options.map((option) => (
                 <div className="w-full flex my-1" key={option.id}>

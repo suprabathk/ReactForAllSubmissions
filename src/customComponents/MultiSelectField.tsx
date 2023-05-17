@@ -33,7 +33,7 @@ export function MultiSelectField({
 
   const areAllOptionsSelected = () => {
     return (
-      currentQuestion.kind === "multiselect" &&
+      currentQuestion.kind === "MULTISELECT" &&
       Array.isArray(currentAnswer) &&
       JSON.stringify(currentAnswer.sort()) ===
         JSON.stringify(currentQuestion.options.map((opt) => opt.option).sort())

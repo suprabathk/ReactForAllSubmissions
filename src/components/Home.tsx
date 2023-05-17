@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { DeleteIcon, PlusIcon, PreviewIcon, SearchIcon } from "../AppIcons";
+import {
+  DeleteIcon,
+  LeftIcon,
+  PlusIcon,
+  PreviewIcon,
+  RightIcon,
+  SearchIcon,
+} from "../AppIcons";
 import { Link, useQueryParams } from "raviger";
 import { getLocalForms, saveLocalForms } from "../utils/localStorageFunctions";
 import { formData } from "../types/formTypes";
@@ -7,9 +14,17 @@ import Modal from "./common/Modal";
 import CreateForm from "./CreateForm";
 import { deleteForm, listForms } from "../utils/apiUtils";
 
-const fetchForms = (setFormDataCB: (value: formData[]) => void) => {
-  listForms({ offset: 0, limit: 10 })
-    .then((data) => setFormDataCB(data.results))
+const fetchForms = (
+  setFormDataCB: (value: formData[]) => void,
+  setCountCB: (count: number) => void,
+  offset: number,
+  limit: number
+) => {
+  listForms({ offset: offset, limit: limit })
+    .then((data) => {
+      setCountCB(data.count);
+      setFormDataCB(data.results);
+    })
     .catch((error) => console.log(error));
 };
 
@@ -18,6 +33,9 @@ export default function Home() {
   const [searchString, setSearchString] = useState("");
   const [formData, setFormData] = useState(getLocalForms());
   const [newForm, setNewForm] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [count, setCount] = useState(0);
+  const limit = 2;
 
   const deleteLocalForm = (id: number) => {
     const localForms = getLocalForms();
@@ -27,7 +45,7 @@ export default function Home() {
   };
 
   useEffect(() => saveLocalForms(formData), [formData]);
-  useEffect(() => fetchForms(setFormData), []);
+  useEffect(() => fetchForms(setFormData, setCount, offset, limit), [offset]);
 
   return (
     <div className="flex flex-col justify-center text-gray-700">
@@ -74,6 +92,7 @@ export default function Home() {
           Create Form
         </button>
       </div>
+
       {formData.length > 0 && (
         <div className="flex-col flex justify-center items-center">
           {formData
@@ -109,6 +128,42 @@ export default function Home() {
                 </button>
               </div>
             ))}
+
+          <div className="w-full pt-4">
+            <div className="flex">
+              <button
+                onClick={() => {
+                  setOffset((offset) => {
+                    return offset - limit >= 0 ? offset - limit : offset;
+                  });
+                }}
+                className="flex gap-2 items-center px-3 text-sm border border-r-0 rounded-l-md bg-gray-300 text-gray-900 border-gray-600"
+              >
+                <LeftIcon className="h-5 w-5" />
+                <span className="font-semibold">Prev</span>
+              </button>
+              <div className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-900 focus:ring-gray-500 focus:border-gray-500">
+                <p className="text-gray-700">
+                  Showing <span className="font-medium">{offset + 1}</span> to{" "}
+                  <span className="font-medium">
+                    {offset + limit < count ? offset + limit : count}
+                  </span>{" "}
+                  of <span className="font-medium">{count}</span> results
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setOffset((offset) => {
+                    return offset + limit < count ? offset + limit : offset;
+                  });
+                }}
+                className="flex gap-2 items-center px-3 text-sm border border-l-0 rounded-r-md bg-gray-300 text-gray-900 border-gray-600"
+              >
+                <p className="font-semibold">Next</p>
+                <RightIcon className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
         </div>
       )}
       {formData.length === 0 && (
