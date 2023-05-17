@@ -18,13 +18,23 @@ export const validateForm = (form: Form) => {
   return errors;
 };
 
-export type textFieldTypes = "text" | "email" | "date" | "tel" | "time";
+export type textFieldTypes =
+  | "text"
+  | "email"
+  | "date"
+  | "tel"
+  | "time"
+  | "textarea";
 
 type TextField = {
   kind: "TEXT";
   id: number;
   label: string;
-  fieldType: textFieldTypes;
+  meta: {
+    description: {
+      fieldType: textFieldTypes;
+    };
+  };
   value: string;
 };
 
@@ -44,13 +54,6 @@ export type MultiSelect = {
   value: string[];
 };
 
-type TextArea = {
-  kind: "TEXTAREA";
-  id: number;
-  label: string;
-  value: string;
-};
-
 export type RadioButton = {
   kind: "RADIO";
   id: number;
@@ -59,12 +62,7 @@ export type RadioButton = {
   options: fieldOption[];
 };
 
-export type formField =
-  | TextField
-  | DropdownField
-  | TextArea
-  | RadioButton
-  | MultiSelect;
+export type formField = TextField | DropdownField | RadioButton | MultiSelect;
 
 export type formData = {
   id: number;

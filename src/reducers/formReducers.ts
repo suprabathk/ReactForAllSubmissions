@@ -80,14 +80,11 @@ function getNewField(kind: formField["kind"], label: string): formField {
         kind: kind,
         id: Number(new Date()),
         label: label,
-        fieldType: "text",
-        value: "",
-      };
-    case "TEXTAREA":
-      return {
-        kind: kind,
-        id: Number(new Date()),
-        label: label,
+        meta: {
+          description: {
+            fieldType: "text",
+          },
+        },
         value: "",
       };
     case "DROPDOWN":
@@ -136,7 +133,12 @@ export function reducer(state: formData, action: formActions): formData {
         label: action.label,
         kind: action.kind,
         options: [],
-      });
+        meta: {
+          description: {
+            fieldType: "text",
+          },
+        },
+      }).then((data) => console.log(data));
       const newField = getNewField(action.kind, action.label);
       return {
         ...state,
@@ -202,6 +204,13 @@ export function reducer(state: formData, action: formActions): formData {
         }),
       };
     case "update_text_type":
+      updateField(state.id, action.id, {
+        meta: {
+          description: {
+            fieldType: action.fieldType,
+          },
+        },
+      });
       return {
         ...state,
         formFields: state.formFields.map((field) => {

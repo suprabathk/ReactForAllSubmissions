@@ -3,7 +3,6 @@ import { PlusIcon } from "../AppIcons";
 import { TextField } from "../formBuilderFields/TextField";
 import { formField } from "../types/formTypes";
 import { Link, navigate } from "raviger";
-import { TextArea } from "../formBuilderFields/TextArea";
 import { RadioButtonField } from "../formBuilderFields/RadioButtonField";
 import { DropdownField } from "../formBuilderFields/DropdownField";
 import { MultiSelectField } from "../formBuilderFields/MultiSelectField";
@@ -146,7 +145,7 @@ export default function Form(props: { id: number }) {
                             key={field.id}
                             id={field.id}
                             label={field.label}
-                            fieldType={field.fieldType}
+                            fieldType={field.meta.description.fieldType}
                             value={field.value}
                             placeholder="Enter label for Text Field"
                             updateLabelCB={(id, label) => {
@@ -161,37 +160,6 @@ export default function Form(props: { id: number }) {
                                 type: "update_text_type",
                                 id: id,
                                 fieldType: fieldType,
-                              });
-                            }}
-                            removeFieldCB={(id) =>
-                              dispatch({
-                                type: "remove_field",
-                                id: id,
-                              })
-                            }
-                          />
-                        </div>
-                      );
-                    case "TEXTAREA":
-                      return (
-                        <div className="my-1" key={field.id}>
-                          <h3 className="text-md font-semibold">Text Area</h3>
-                          {field.label === "" && (
-                            <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
-                              Label cannot be empty.
-                            </div>
-                          )}
-                          <TextArea
-                            key={field.id}
-                            id={field.id}
-                            label={field.label}
-                            placeholder={"Enter label for Text area"}
-                            value={field.value}
-                            updateLabelCB={(id, label) => {
-                              dispatch({
-                                type: "update_label",
-                                id: id,
-                                label: label,
                               });
                             }}
                             removeFieldCB={(id) =>
@@ -355,9 +323,6 @@ export default function Form(props: { id: number }) {
           >
             <option className="w-full bg-gray-300" value="TEXT">
               Text Field
-            </option>
-            <option className="w-full bg-gray-300" value="TEXTAREA">
-              Text Area
             </option>
             <option className="w-full bg-gray-300" value="RADIO">
               Radio button

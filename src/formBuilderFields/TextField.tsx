@@ -46,6 +46,9 @@ export function TextField(props: {
           <option className="w-full bg-gray-200" value="text">
             Text
           </option>
+          <option className="w-full bg-gray-200" value="textarea">
+            Text Area
+          </option>
           <option className="w-full bg-gray-200" value="date">
             Date
           </option>

@@ -95,16 +95,28 @@ export function PreviewQuestion({
                 {currentQuestion.currentQuestion.label}
               </label>
               <div className="flex flex-col gap-2 mt-2">
-                {currentQuestion.currentQuestion.kind === "TEXT" && (
-                  <input
-                    type={currentQuestion.currentQuestion.fieldType}
-                    id={`q-${currentQuestion.currentQuestion.id}`}
-                    value={currentAnswer}
-                    onChange={(event) => setCurrentAnswer(event.target.value)}
-                    className="rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500"
-                    placeholder="Enter your answer"
-                  />
-                )}
+                {currentQuestion.currentQuestion.kind === "TEXT" &&
+                  (currentQuestion.currentQuestion.meta.description
+                    .fieldType === "textarea" ? (
+                    <textarea
+                      id={`q-${currentQuestion.currentQuestion.id}`}
+                      value={currentAnswer}
+                      className="rounded-md border block w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500"
+                      onChange={(e) => setCurrentAnswer(e.target.value)}
+                    />
+                  ) : (
+                    <input
+                      type={
+                        currentQuestion.currentQuestion.meta.description
+                          .fieldType
+                      }
+                      id={`q-${currentQuestion.currentQuestion.id}`}
+                      value={currentAnswer}
+                      onChange={(event) => setCurrentAnswer(event.target.value)}
+                      className="rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500"
+                      placeholder="Enter your answer"
+                    />
+                  ))}
                 {currentQuestion.currentQuestion.kind === "DROPDOWN" && (
                   <select
                     id={`q-${currentQuestion.currentQuestion.id}`}
@@ -149,14 +161,6 @@ export function PreviewQuestion({
                       </div>
                     ))}
                   </div>
-                )}
-                {currentQuestion.currentQuestion.kind === "TEXTAREA" && (
-                  <textarea
-                    id={`q-${currentQuestion.currentQuestion.id}`}
-                    value={currentAnswer}
-                    className="rounded-md border block w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500"
-                    onChange={(e) => setCurrentAnswer(e.target.value)}
-                  />
                 )}
                 <NextPrevAndSubmitButton
                   isFirstQuestion={isFirstQuestion}

@@ -1,4 +1,5 @@
 import { PaginationParams } from "../types/common";
+import { textFieldTypes } from "../types/formTypes";
 import { Form, fieldAnswer, fieldOption, formField } from "../types/formTypes";
 
 const API_BASE_URL = "https://tsapi.coronasafe.live/api/";
@@ -72,7 +73,12 @@ export const fetchFormFields = (formID: number) => {
 
 export const addFieldCall = (
   formID: number,
-  fieldParams: { label: string; kind: formField["kind"]; options?: [] }
+  fieldParams: {
+    label: string;
+    kind: formField["kind"];
+    options?: [];
+    meta?: { description: { fieldType: textFieldTypes } };
+  }
 ) => {
   return request(`forms/${formID}/fields/`, "POST", fieldParams);
 };
@@ -95,7 +101,11 @@ export const updateForm = (
 export const updateField = (
   formID: number,
   fieldID: number,
-  fieldParam: { label?: string; options?: fieldOption[] }
+  fieldParam: {
+    label?: string;
+    options?: fieldOption[];
+    meta?: { description: { fieldType: textFieldTypes } };
+  }
 ) => {
   return request(`forms/${formID}/fields/${fieldID}`, "PATCH", fieldParam);
 };
