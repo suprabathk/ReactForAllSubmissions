@@ -1,5 +1,5 @@
 import { PaginationParams } from "../types/common";
-import { Form, formField } from "../types/formTypes";
+import { Form, fieldOption, formField } from "../types/formTypes";
 
 const API_BASE_URL = "https://tsapi.coronasafe.live/api/";
 
@@ -74,26 +74,28 @@ export const addFieldCall = (
   formID: number,
   fieldParams: { label: string; kind: formField["kind"]; options?: [] }
 ) => {
-  console.log(fieldParams);
-
   return request(`forms/${formID}/fields/`, "POST", fieldParams);
+};
+
+export const deleteFieldCall = (formID: number, fieldID: number) => {
+  return request(`forms/${formID}/fields/${fieldID}/`, "DELETE");
 };
 
 export const deleteForm = (formID: number) => {
   return request(`forms/${formID}`, "DELETE");
 };
 
-export const updateFormTitle = (formID: number, title: string) => {
-  return request(`forms/${formID}`, "PATCH", {
-    title: title,
-  });
+export const updateForm = (
+  formID: number,
+  formParam: { title?: string; description?: string }
+) => {
+  return request(`forms/${formID}`, "PATCH", formParam);
 };
 
-export const updateFormDescriptionCall = (
+export const updateField = (
   formID: number,
-  description: string
+  fieldID: number,
+  fieldParam: { label?: string; options?: fieldOption[] }
 ) => {
-  return request(`forms/${formID}`, "PATCH", {
-    description: description,
-  });
+  return request(`forms/${formID}/fields/${fieldID}`, "PATCH", fieldParam);
 };

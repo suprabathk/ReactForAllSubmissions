@@ -8,7 +8,6 @@ import {
   SearchIcon,
 } from "../AppIcons";
 import { Link, useQueryParams } from "raviger";
-import { getLocalForms, saveLocalForms } from "../utils/localStorageFunctions";
 import { formData } from "../types/formTypes";
 import Modal from "./common/Modal";
 import CreateForm from "./CreateForm";
@@ -31,20 +30,17 @@ const fetchForms = (
 export default function Home() {
   const [{ search }, setQuery] = useQueryParams();
   const [searchString, setSearchString] = useState("");
-  const [formData, setFormData] = useState(getLocalForms());
+  const [formData, setFormData] = useState<formData[]>([]);
   const [newForm, setNewForm] = useState(false);
   const [offset, setOffset] = useState(0);
   const [count, setCount] = useState(0);
   const limit = 2;
 
   const deleteLocalForm = (id: number) => {
-    const localForms = getLocalForms();
     deleteForm(id);
-    const updatedLocalForms = localForms.filter((form) => form.id !== id);
-    setFormData(updatedLocalForms);
+    setFormData((formData) => formData.filter((form) => form.id !== id));
   };
 
-  useEffect(() => saveLocalForms(formData), [formData]);
   useEffect(() => fetchForms(setFormData, setCount, offset, limit), [offset]);
 
   return (
@@ -142,8 +138,8 @@ export default function Home() {
                 <LeftIcon className="h-5 w-5" />
                 <span className="font-semibold">Prev</span>
               </button>
-              <div className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-900 focus:ring-gray-500 focus:border-gray-500">
-                <p className="text-gray-700">
+              <div className="rounded-none border min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-900 focus:ring-gray-500 focus:border-gray-500">
+                <p className="text-gray-700 text-center">
                   Showing <span className="font-medium">{offset + 1}</span> to{" "}
                   <span className="font-medium">
                     {offset + limit < count ? offset + limit : count}

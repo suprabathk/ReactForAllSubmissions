@@ -3,10 +3,6 @@ import { PlusIcon } from "../AppIcons";
 import { TextField } from "../formBuilderFields/TextField";
 import { formField } from "../types/formTypes";
 import { Link, navigate } from "raviger";
-import {
-  getInitialFormData,
-  saveFormData,
-} from "../utils/localStorageFunctions";
 import { TextArea } from "../formBuilderFields/TextArea";
 import { RadioButtonField } from "../formBuilderFields/RadioButtonField";
 import { DropdownField } from "../formBuilderFields/DropdownField";
@@ -14,43 +10,43 @@ import { MultiSelectField } from "../formBuilderFields/MultiSelectField";
 import { formActions, reducer } from "../reducers/formReducers";
 import { fetchFormData, fetchFormFields } from "../utils/apiUtils";
 
-const initialFormFields: formField[] = [
-  {
-    kind: "TEXT",
-    id: 1,
-    label: "First Name",
-    fieldType: "text",
-    value: "",
-  },
-  {
-    kind: "TEXT",
-    id: 2,
-    label: "Last Name",
-    fieldType: "text",
-    value: "",
-  },
-  {
-    kind: "TEXT",
-    id: 3,
-    label: "Email",
-    fieldType: "text",
-    value: "",
-  },
-  {
-    kind: "TEXT",
-    id: 4,
-    label: "Date of birth",
-    fieldType: "date",
-    value: "",
-  },
-  {
-    kind: "TEXT",
-    id: 5,
-    label: "Phone number",
-    fieldType: "tel",
-    value: "",
-  },
-];
+// const initialFormFields: formField[] = [
+//   {
+//     kind: "TEXT",
+//     id: 1,
+//     label: "First Name",
+//     fieldType: "text",
+//     value: "",
+//   },
+//   {
+//     kind: "TEXT",
+//     id: 2,
+//     label: "Last Name",
+//     fieldType: "text",
+//     value: "",
+//   },
+//   {
+//     kind: "TEXT",
+//     id: 3,
+//     label: "Email",
+//     fieldType: "text",
+//     value: "",
+//   },
+//   {
+//     kind: "TEXT",
+//     id: 4,
+//     label: "Date of birth",
+//     fieldType: "date",
+//     value: "",
+//   },
+//   {
+//     kind: "TEXT",
+//     id: 5,
+//     label: "Phone number",
+//     fieldType: "tel",
+//     value: "",
+//   },
+// ];
 
 const fetchForm = (formID: number, dispatch: React.Dispatch<formActions>) => {
   fetchFormData(formID).then((data) => {
@@ -70,9 +66,11 @@ const fetchForm = (formID: number, dispatch: React.Dispatch<formActions>) => {
 };
 
 export default function Form(props: { id: number }) {
-  const [fieldState, dispatch] = useReducer(reducer, null, () =>
-    getInitialFormData(props.id, initialFormFields)
-  );
+  const [fieldState, dispatch] = useReducer(reducer, {
+    id: props.id,
+    title: "",
+    formFields: [],
+  });
   const [newLabel, setNewLabel] = useState("");
   const [newKind, setNewKind] = useState<formField["kind"]>("TEXT");
   const [error, setError] = useState("");
@@ -80,7 +78,8 @@ export default function Form(props: { id: number }) {
 
   useEffect(() => {
     fieldState.id !== props.id && navigate(`/form/${fieldState.id}`);
-  }, [fieldState.id, props.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fieldState.id]);
 
   useEffect(() => {
     fetchForm(props.id, dispatch);
@@ -410,12 +409,6 @@ export default function Form(props: { id: number }) {
         </div>
       </div>
       <div className="flex gap-4 mt-2">
-        <button
-          className="bg-gray-300 py-2 w-full rounded-lg mt-3 border font-semibold transition-all border-gray-700 text-gray-700"
-          onClick={() => saveFormData(fieldState)}
-        >
-          Save
-        </button>
         <Link
           href="/"
           className="text-center bg-gray-300 py-2 w-full rounded-lg mt-3 border font-semibold transition-all border-gray-700 text-gray-7s00"

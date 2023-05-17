@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { getFormData } from "../utils/localStorageFunctions";
-import { fieldAnswer } from "../types/formTypes";
+import { fieldAnswer, formData } from "../types/formTypes";
 import {
   BackIcon,
   CompleteIcon,
@@ -15,6 +14,7 @@ import {
   answerReducer,
   questionReducer,
 } from "../reducers/previewFormReducers";
+import { fetchFormData } from "../utils/apiUtils";
 
 export function NextPrevAndSubmitButton({
   isFirstQuestion,
@@ -72,8 +72,19 @@ export function NextPrevAndSubmitButton({
   );
 }
 
+const getFormData = (
+  formID: number,
+  setCurrentFormDataCB: (formData: formData) => void
+) => {
+  fetchFormData(formID).then((data) => setCurrentFormDataCB(data));
+};
+
 export function PreviewForm(props: { id: number }) {
-  const currentFormData = getFormData(props.id);
+  const [currentFormData, setCurrentFormData] = useState<formData>({
+    id: props.id,
+    title: "",
+    formFields: [],
+  });
   const [answers, dispatchAnswer] = useReducer(answerReducer, []);
   const [currentQuestion, dispatchQuestion] = useReducer(questionReducer, {
     index: 0,
@@ -90,7 +101,8 @@ export function PreviewForm(props: { id: number }) {
 
   const getIndexQuestion = (index: number) => currentFormData.formFields[index];
 
-  useEffect(() => console.log(answers), [answers]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getFormData(props.id, setCurrentFormData), []);
 
   useEffect(() => {
     let ans: fieldAnswer[] = [];

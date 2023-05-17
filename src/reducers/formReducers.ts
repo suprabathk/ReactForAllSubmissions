@@ -6,8 +6,9 @@ import {
 } from "../types/formTypes";
 import {
   addFieldCall,
-  updateFormDescriptionCall,
-  updateFormTitle,
+  deleteFieldCall,
+  updateField,
+  updateForm,
 } from "../utils/apiUtils";
 
 type AddAction = {
@@ -124,7 +125,12 @@ export function reducer(state: formData, action: formActions): formData {
         formFields: action.fields,
       };
     case "set_form_data":
-      return { ...state, title: action.title, description: action.description };
+      return {
+        ...state,
+        id: action.id,
+        title: action.title,
+        description: action.description,
+      };
     case "add_field":
       addFieldCall(state.id, {
         label: action.label,
@@ -137,18 +143,21 @@ export function reducer(state: formData, action: formActions): formData {
         formFields: [...state.formFields, newField],
       };
     case "remove_field":
+      deleteFieldCall(state.id, action.id);
       return {
         ...state,
         formFields: state.formFields.filter((field) => field.id !== action.id),
       };
     case "update_title":
-      updateFormTitle(state.id, action.title);
+      updateForm(state.id, {
+        title: action.title,
+      });
       return {
         ...state,
         title: action.title,
       };
     case "update_form_description":
-      updateFormDescriptionCall(state.id, action.description);
+      updateForm(state.id, { description: action.description });
       return {
         ...state,
         description: action.description,
@@ -157,6 +166,10 @@ export function reducer(state: formData, action: formActions): formData {
       const validatedOptions = action.options
         ? action.options.filter((opt) => opt.option !== "")
         : [];
+
+      updateField(state.id, action.id, { options: validatedOptions }).then(
+        (data) => console.log(data)
+      );
       return {
         ...state,
         formFields: state.formFields.map((field) => {
@@ -175,6 +188,9 @@ export function reducer(state: formData, action: formActions): formData {
         }),
       };
     case "update_label":
+      updateField(state.id, action.id, {
+        label: action.label,
+      });
       return {
         ...state,
         formFields: state.formFields.map((field) => {
