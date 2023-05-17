@@ -5,10 +5,12 @@ import { getLocalForms, saveLocalForms } from "../utils/localStorageFunctions";
 import { formData } from "../types/formTypes";
 import Modal from "./common/Modal";
 import CreateForm from "./CreateForm";
-import { listForms } from "../utils/apiUtils";
+import { deleteForm, listForms } from "../utils/apiUtils";
 
 const fetchForms = (setFormDataCB: (value: formData[]) => void) => {
-  listForms().then((data) => setFormDataCB(data));
+  listForms({ offset: 0, limit: 10 })
+    .then((data) => setFormDataCB(data.results))
+    .catch((error) => console.log(error));
 };
 
 export default function Home() {
@@ -19,6 +21,7 @@ export default function Home() {
 
   const deleteLocalForm = (id: number) => {
     const localForms = getLocalForms();
+    deleteForm(id);
     const updatedLocalForms = localForms.filter((form) => form.id !== id);
     setFormData(updatedLocalForms);
   };
@@ -78,13 +81,13 @@ export default function Home() {
               form.title.toLowerCase().includes(search?.toLowerCase() || "")
             )
             .map((form) => (
-              <div className="flex w-full my-2" key={form.id}>
+              <div className="flex w-full my-2 bg-" key={form.id}>
                 <Link
                   href={`/form/${form.id}`}
                   className="flex flex-col text-start rounded-none border border-r-0 flex-1 min-w-0 w-full text-sm px-2.5 py-1 bg-gray-100 rounded-l-md border-gray-600 placeholder-gray-400 text-gray-700 focus:ring-gray-500 focus:border-gray-500"
                 >
                   <h2 className="font-medium text-lg">{form.title}</h2>
-                  {/* <h2 className="">{form.formFields.length} fields</h2> */}
+                  <h2 className="">{form.description}</h2>
                 </Link>
                 <Link
                   href={`/preview/${form.id}`}

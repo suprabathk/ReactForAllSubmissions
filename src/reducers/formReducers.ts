@@ -4,11 +4,28 @@ import {
   formField,
   textFieldTypes,
 } from "../types/formTypes";
+import {
+  addFieldCall,
+  updateFormDescriptionCall,
+  updateFormTitle,
+} from "../utils/apiUtils";
 
 type AddAction = {
   type: "add_field";
   kind: formField["kind"];
   label: string;
+};
+
+type SetFields = {
+  type: "set_fields";
+  fields: formField[];
+};
+
+type SetFormData = {
+  type: "set_form_data";
+  id: number;
+  title: string;
+  description: string;
 };
 
 type RemoveAction = {
@@ -39,7 +56,15 @@ type updateTextTypeAction = {
   fieldType: textFieldTypes;
 };
 
-type formActions =
+type updateFormDescription = {
+  type: "update_form_description";
+  description: string;
+};
+
+export type formActions =
+  | updateFormDescription
+  | SetFormData
+  | SetFields
   | AddAction
   | RemoveAction
   | UpdateTitleAction
@@ -93,7 +118,18 @@ function getNewField(kind: formField["kind"], label: string): formField {
 
 export function reducer(state: formData, action: formActions): formData {
   switch (action.type) {
+    case "set_fields":
+      return {
+        ...state,
+        formFields: action.fields,
+      };
+    case "set_form_data":
+      return { ...state, title: action.title, description: action.description };
     case "add_field":
+      addFieldCall(state.id, {
+        label: action.label,
+        kind: action.kind,
+      });
       const newField = getNewField(action.kind, action.label);
       return {
         ...state,
@@ -105,9 +141,16 @@ export function reducer(state: formData, action: formActions): formData {
         formFields: state.formFields.filter((field) => field.id !== action.id),
       };
     case "update_title":
+      updateFormTitle(state.id, action.title);
       return {
         ...state,
         title: action.title,
+      };
+    case "update_form_description":
+      updateFormDescriptionCall(state.id, action.description);
+      return {
+        ...state,
+        description: action.description,
       };
     case "update_options":
       const validatedOptions = action.options.filter(

@@ -5,6 +5,9 @@ import { User } from "./types/userTypes";
 
 const getCurrentUser = async (setCurrentUser: (currentUser: User) => void) => {
   const currentUser = await me();
+  if (currentUser.username === "") {
+    localStorage.removeItem("token");
+  }
   setCurrentUser(currentUser);
 };
 

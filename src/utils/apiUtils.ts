@@ -1,3 +1,5 @@
+import { PaginationParams } from "../types/common";
+import { formField } from "../types/formTypes";
 import { Form } from "../types/formTypes";
 
 const API_BASE_URL = "https://tsapi.coronasafe.live/api/";
@@ -57,6 +59,40 @@ export const me = () => {
   return request("users/me/", "GET", {});
 };
 
-export const listForms = () => {
-  return request("forms/", "GET");
+export const listForms = (pageParams: PaginationParams) => {
+  return request("forms/", "GET", pageParams);
+};
+
+export const fetchFormData = (formID: number) => {
+  return request(`forms/${formID}`, "GET");
+};
+
+export const fetchFormFields = (formID: number) => {
+  return request(`forms/${formID}/fields/`, "GET");
+};
+
+export const addFieldCall = (
+  formID: number,
+  fieldParams: { label: string; kind: formField["kind"] }
+) => {
+  return request(`forms/${formID}/fields`, "POST", fieldParams);
+};
+
+export const deleteForm = (formID: number) => {
+  return request(`forms/${formID}`, "DELETE");
+};
+
+export const updateFormTitle = (formID: number, title: string) => {
+  return request(`forms/${formID}`, "PATCH", {
+    title: title,
+  });
+};
+
+export const updateFormDescriptionCall = (
+  formID: number,
+  description: string
+) => {
+  return request(`forms/${formID}`, "PATCH", {
+    description: description,
+  });
 };

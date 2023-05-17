@@ -27,8 +27,7 @@ export default function CreateForm() {
       try {
         const data = await createForm(form);
         console.log(data);
-
-        navigate(`/forms/${data.id}`);
+        navigate(`/form/${data.id}`);
       } catch (error) {
         console.log(error);
       }

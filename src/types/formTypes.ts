@@ -69,6 +69,7 @@ export type formField =
 export type formData = {
   id: number;
   title: string;
+  description?: string;
   formFields: formField[];
 };
 
