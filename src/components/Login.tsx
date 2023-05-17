@@ -74,7 +74,7 @@ export default function Login() {
           Sign in
         </button>
         <p className="text-sm font-light text-gray-500">
-          Don't have an account yet?
+          Don't have an account yet?{" "}
           <span className="font-medium text-blue-500 hover:underline">
             Sign up
           </span>
