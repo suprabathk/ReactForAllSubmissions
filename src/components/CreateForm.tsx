@@ -26,7 +26,6 @@ export default function CreateForm() {
     if (Object.keys(validationErrors).length === 0) {
       try {
         const data = await createForm(form);
-        console.log(data);
         navigate(`/form/${data.id}`);
       } catch (error) {
         console.log(error);

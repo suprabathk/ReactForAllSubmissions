@@ -20,12 +20,15 @@ export function answerReducer(
       let newState = [...state];
       let alreadyAnswered = false;
       state.forEach((answer) => {
-        if (answer.id === action.questionID) {
+        if (answer.form_field === action.questionID) {
           alreadyAnswered = true;
-          if (answer.ans !== action.ans) {
+          if (answer.value !== action.ans) {
             newState = state.map((answer) => ({
               ...answer,
-              ans: answer.id === action.questionID ? action.ans : answer.ans,
+              ans:
+                answer.form_field === action.questionID
+                  ? action.ans
+                  : answer.value,
             }));
           }
         }
@@ -34,8 +37,8 @@ export function answerReducer(
         newState = [
           ...newState,
           {
-            id: action.questionID,
-            ans: action.ans,
+            form_field: action.questionID,
+            value: action.ans,
           },
         ];
       }
@@ -61,15 +64,19 @@ export function questionReducer(
     case "update_question":
       switch (action.kind) {
         case "next":
-          return {
-            index: state.index + 1,
-            currentQuestion: action.getIndexQuestionCB(state.index + 1),
-          };
+          return (
+            state && {
+              index: state.index + 1,
+              currentQuestion: action.getIndexQuestionCB(state.index + 1),
+            }
+          );
         case "prev":
-          return {
-            index: state.index - 1,
-            currentQuestion: action.getIndexQuestionCB(state.index - 1),
-          };
+          return (
+            state && {
+              index: state.index - 1,
+              currentQuestion: action.getIndexQuestionCB(state.index - 1),
+            }
+          );
       }
   }
 }

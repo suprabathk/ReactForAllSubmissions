@@ -167,9 +167,7 @@ export function reducer(state: formData, action: formActions): formData {
         ? action.options.filter((opt) => opt.option !== "")
         : [];
 
-      updateField(state.id, action.id, { options: validatedOptions }).then(
-        (data) => console.log(data)
-      );
+      updateField(state.id, action.id, { options: validatedOptions });
       return {
         ...state,
         formFields: state.formFields.map((field) => {

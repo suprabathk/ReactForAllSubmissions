@@ -87,16 +87,6 @@ export default function Form(props: { id: number }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   let timeout = setTimeout(() => {
-  //     saveFormData(fieldState);
-  //     console.log("Saved to local storage");
-  //   }, 500);
-  //   return () => {
-  //     clearTimeout(timeout);
-  //   };
-  // }, [fieldState]);
-
   return (
     <div className="flex flex-col gap-4 divide-y">
       <div>

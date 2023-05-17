@@ -74,8 +74,8 @@ export type formData = {
 };
 
 export type fieldAnswer = {
-  id: number;
-  ans: string | string[];
+  form_field: number;
+  value: string | string[];
 };
 
 export type fieldOption = {

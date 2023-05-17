@@ -1,5 +1,5 @@
 import { PaginationParams } from "../types/common";
-import { Form, fieldOption, formField } from "../types/formTypes";
+import { Form, fieldAnswer, fieldOption, formField } from "../types/formTypes";
 
 const API_BASE_URL = "https://tsapi.coronasafe.live/api/";
 
@@ -98,4 +98,11 @@ export const updateField = (
   fieldParam: { label?: string; options?: fieldOption[] }
 ) => {
   return request(`forms/${formID}/fields/${fieldID}`, "PATCH", fieldParam);
+};
+
+export const submitAnswer = (
+  formID: number,
+  answers: { answers: fieldAnswer[] }
+) => {
+  return request(`forms/${formID}/submission/`, "POST", answers);
 };
