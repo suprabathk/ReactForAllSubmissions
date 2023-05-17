@@ -47,11 +47,11 @@ type DropdownField = {
 };
 
 export type MultiSelect = {
-  kind: "MULTISELECT";
+  kind: "GENERIC";
   id: number;
   label: string;
   options: fieldOption[];
-  value: string[];
+  value: string;
 };
 
 export type RadioButton = {
@@ -73,7 +73,7 @@ export type formData = {
 
 export type fieldAnswer = {
   form_field: number;
-  value: string | string[];
+  value: string;
 };
 
 export type fieldOption = {

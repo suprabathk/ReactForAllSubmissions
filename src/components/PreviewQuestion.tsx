@@ -20,7 +20,7 @@ export function PreviewQuestion({
     index: 0,
     currentQuestion: currentFormData.formFields[0],
   });
-  const [currentAnswer, setCurrentAnswer] = useState<string | string[]>(
+  const [currentAnswer, setCurrentAnswer] = useState<string>(
     currentQuestion.index < currentFormData.formFields.length
       ? currentQuestion.currentQuestion.value
       : ""
@@ -56,7 +56,7 @@ export function PreviewQuestion({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestion]);
 
-  const nextQuestionCB = (questionID: number, ans: string | string[]) => {
+  const nextQuestionCB = (questionID: number, ans: string) => {
     dispatchAnswer({
       type: "add_answer",
       questionID: questionID,
@@ -77,6 +77,10 @@ export function PreviewQuestion({
       getIndexQuestionCB: getIndexQuestion,
       kind: "prev",
     });
+  };
+
+  const setCurrentAnswerToString = (options: string[]) => {
+    setCurrentAnswer(JSON.stringify(options));
   };
 
   return (
@@ -100,7 +104,7 @@ export function PreviewQuestion({
                     .fieldType === "textarea" ? (
                     <textarea
                       id={`q-${currentQuestion.currentQuestion.id}`}
-                      value={currentAnswer}
+                      value={currentAnswer ? currentAnswer : ""}
                       className="rounded-md border block w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500"
                       onChange={(e) => setCurrentAnswer(e.target.value)}
                     />
@@ -111,7 +115,7 @@ export function PreviewQuestion({
                           .fieldType
                       }
                       id={`q-${currentQuestion.currentQuestion.id}`}
-                      value={currentAnswer}
+                      value={currentAnswer ? currentAnswer : ""}
                       onChange={(event) => setCurrentAnswer(event.target.value)}
                       className="rounded-md border block flex-1 min-w-0 w-full text-sm p-2.5 bg-gray-100 border-gray-600 placeholder-gray-400 focus:ring-gray-500 focus:border-gray-500"
                       placeholder="Enter your answer"
@@ -136,11 +140,11 @@ export function PreviewQuestion({
                     ))}
                   </select>
                 )}
-                {currentQuestion.currentQuestion.kind === "MULTISELECT" && (
+                {currentQuestion.currentQuestion.kind === "GENERIC" && (
                   <MultiSelectField
-                    currentAnswer={currentAnswer}
+                    currentAnswer={JSON.parse(currentAnswer)}
                     currentQuestion={currentQuestion.currentQuestion}
-                    setCurrentAnswerCB={setCurrentAnswer}
+                    setCurrentAnswerCB={setCurrentAnswerToString}
                   />
                 )}
                 {currentQuestion.currentQuestion.kind === "RADIO" && (

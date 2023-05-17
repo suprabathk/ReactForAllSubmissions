@@ -7,7 +7,7 @@ import {
 type addAnswerAction = {
   type: "add_answer";
   questionID: number;
-  ans: string | string[];
+  ans: string;
 };
 type answerActions = addAnswerAction;
 

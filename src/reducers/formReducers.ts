@@ -95,13 +95,13 @@ function getNewField(kind: formField["kind"], label: string): formField {
         options: [],
         value: "",
       };
-    case "MULTISELECT":
+    case "GENERIC":
       return {
         kind: kind,
         id: Number(new Date()),
         label: label,
         options: [],
-        value: [],
+        value: "",
       };
     case "RADIO":
       return {
@@ -177,7 +177,7 @@ export function reducer(state: formData, action: formActions): formData {
             action.id === field.id &&
             (field.kind === "RADIO" ||
               field.kind === "DROPDOWN" ||
-              field.kind === "MULTISELECT")
+              field.kind === "GENERIC")
           ) {
             return {
               ...field,

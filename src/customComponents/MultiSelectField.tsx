@@ -7,7 +7,7 @@ export function MultiSelectField({
   currentQuestion,
   setCurrentAnswerCB,
 }: {
-  currentAnswer: string | string[];
+  currentAnswer: string[];
   currentQuestion: MultiSelect;
   setCurrentAnswerCB: (options: string[]) => void;
 }) {
@@ -33,7 +33,7 @@ export function MultiSelectField({
 
   const areAllOptionsSelected = () => {
     return (
-      currentQuestion.kind === "MULTISELECT" &&
+      currentQuestion.kind === "GENERIC" &&
       Array.isArray(currentAnswer) &&
       JSON.stringify(currentAnswer.sort()) ===
         JSON.stringify(currentQuestion.options.map((opt) => opt.option).sort())

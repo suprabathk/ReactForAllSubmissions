@@ -6,7 +6,7 @@ export function MultiSelectField(props: {
   id: number;
   label: string;
   placeholder: string;
-  value: string[];
+  value: string;
   options: fieldOption[];
   updateLabelCB: (id: number, value: string) => void;
   updateOptionsCB: (id: number, options: fieldOption[]) => void;

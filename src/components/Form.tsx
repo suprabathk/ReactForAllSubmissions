@@ -209,7 +209,7 @@ export default function Form(props: { id: number }) {
                           />
                         </div>
                       );
-                    case "MULTISELECT":
+                    case "GENERIC":
                       return (
                         <div className="my-1" key={field.id}>
                           <h3 className="text-md font-semibold">Multiselect</h3>
@@ -330,7 +330,7 @@ export default function Form(props: { id: number }) {
             <option className="w-full bg-gray-300" value="DROPDOWN">
               Dropdown
             </option>
-            <option className="w-full bg-gray-300" value="MULTISELECT">
+            <option className="w-full bg-gray-300" value="GENERIC">
               Multi-Select
             </option>
           </select>
