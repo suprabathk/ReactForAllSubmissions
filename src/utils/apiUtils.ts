@@ -39,11 +39,15 @@ export const request = async (
     },
     body: method !== "GET" ? payload : null,
   });
-  const json = await response.json();
-  if (response.ok) {
-    return json;
-  } else {
-    throw Error(json);
+  try {
+    const json = await response.json();
+    if (response.ok) {
+      return json;
+    } else {
+      throw Error(json);
+    }
+  } catch (err) {
+    console.log();
   }
 };
 

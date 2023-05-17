@@ -13,7 +13,9 @@ export function MultiSelectField(props: {
   removeFieldCB: (id: number) => void;
 }) {
   const [label, setLabel] = useState(props.label);
-  const [options, setOptions] = useState<fieldOption[]>(props.options);
+  const [options, setOptions] = useState<fieldOption[]>(
+    props.options ? props.options : []
+  );
 
   const addOption = () => {
     const option: fieldOption = {

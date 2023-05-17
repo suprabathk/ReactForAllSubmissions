@@ -7,45 +7,11 @@ import { RadioButtonField } from "../formBuilderFields/RadioButtonField";
 import { DropdownField } from "../formBuilderFields/DropdownField";
 import { MultiSelectField } from "../formBuilderFields/MultiSelectField";
 import { formActions, reducer } from "../reducers/formReducers";
-import { fetchFormData, fetchFormFields } from "../utils/apiUtils";
-
-// const initialFormFields: formField[] = [
-//   {
-//     kind: "TEXT",
-//     id: 1,
-//     label: "First Name",
-//     fieldType: "text",
-//     value: "",
-//   },
-//   {
-//     kind: "TEXT",
-//     id: 2,
-//     label: "Last Name",
-//     fieldType: "text",
-//     value: "",
-//   },
-//   {
-//     kind: "TEXT",
-//     id: 3,
-//     label: "Email",
-//     fieldType: "text",
-//     value: "",
-//   },
-//   {
-//     kind: "TEXT",
-//     id: 4,
-//     label: "Date of birth",
-//     fieldType: "date",
-//     value: "",
-//   },
-//   {
-//     kind: "TEXT",
-//     id: 5,
-//     label: "Phone number",
-//     fieldType: "tel",
-//     value: "",
-//   },
-// ];
+import {
+  addFieldCall,
+  fetchFormData,
+  fetchFormFields,
+} from "../utils/apiUtils";
 
 const fetchForm = (formID: number, dispatch: React.Dispatch<formActions>) => {
   fetchFormData(formID).then((data) => {
@@ -74,6 +40,29 @@ export default function Form(props: { id: number }) {
   const [newKind, setNewKind] = useState<formField["kind"]>("TEXT");
   const [error, setError] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
+
+  const addFormField = (
+    formID: number,
+    label: string,
+    kind: formField["kind"]
+  ) => {
+    addFieldCall(formID, {
+      label: label,
+      kind: kind,
+      meta: {
+        description: {
+          fieldType: "text",
+        },
+      },
+    }).then((data) =>
+      dispatch({
+        type: "add_field",
+        label: newLabel,
+        kind: newKind,
+        newField: data,
+      })
+    );
+  };
 
   useEffect(() => {
     fieldState.id !== props.id && navigate(`/form/${fieldState.id}`);
@@ -350,11 +339,7 @@ export default function Form(props: { id: number }) {
               setError("");
               setNewKind("TEXT");
               setNewLabel("");
-              return dispatch({
-                type: "add_field",
-                label: newLabel,
-                kind: newKind,
-              });
+              addFormField(fieldState.id, newLabel, newKind);
             }}
             className="inline-flex items-center px-3 text-sm border border-l-0 rounded-r-md bg-gray-300 text-gray-700 border-gray-600"
           >

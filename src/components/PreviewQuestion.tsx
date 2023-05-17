@@ -142,7 +142,9 @@ export function PreviewQuestion({
                 )}
                 {currentQuestion.currentQuestion.kind === "GENERIC" && (
                   <MultiSelectField
-                    currentAnswer={JSON.parse(currentAnswer)}
+                    currentAnswer={
+                      currentAnswer ? JSON.parse(currentAnswer) : []
+                    }
                     currentQuestion={currentQuestion.currentQuestion}
                     setCurrentAnswerCB={setCurrentAnswerToString}
                   />

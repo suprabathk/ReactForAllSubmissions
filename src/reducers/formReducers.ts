@@ -4,16 +4,12 @@ import {
   formField,
   textFieldTypes,
 } from "../types/formTypes";
-import {
-  addFieldCall,
-  deleteFieldCall,
-  updateField,
-  updateForm,
-} from "../utils/apiUtils";
+import { deleteFieldCall, updateField, updateForm } from "../utils/apiUtils";
 
 type AddAction = {
   type: "add_field";
   kind: formField["kind"];
+  newField: formField;
   label: string;
 };
 
@@ -73,46 +69,46 @@ export type formActions =
   | UpdateLabelAction
   | updateTextTypeAction;
 
-function getNewField(kind: formField["kind"], label: string): formField {
-  switch (kind) {
-    case "TEXT":
-      return {
-        kind: kind,
-        id: Number(new Date()),
-        label: label,
-        meta: {
-          description: {
-            fieldType: "text",
-          },
-        },
-        value: "",
-      };
-    case "DROPDOWN":
-      return {
-        kind: kind,
-        id: Number(new Date()),
-        label: label,
-        options: [],
-        value: "",
-      };
-    case "GENERIC":
-      return {
-        kind: kind,
-        id: Number(new Date()),
-        label: label,
-        options: [],
-        value: "",
-      };
-    case "RADIO":
-      return {
-        kind: kind,
-        id: Number(new Date()),
-        label: label,
-        options: [],
-        value: "",
-      };
-  }
-}
+// function getNewField(kind: formField["kind"], label: string): formField {
+//   switch (kind) {
+//     case "TEXT":
+//       return {
+//         kind: kind,
+//         id: Number(new Date()),
+//         label: label,
+//         meta: {
+//           description: {
+//             fieldType: "text",
+//           },
+//         },
+//         value: "",
+//       };
+//     case "DROPDOWN":
+//       return {
+//         kind: kind,
+//         id: Number(new Date()),
+//         label: label,
+//         options: [],
+//         value: "",
+//       };
+//     case "GENERIC":
+//       return {
+//         kind: kind,
+//         id: Number(new Date()),
+//         label: label,
+//         options: [],
+//         value: "",
+//       };
+//     case "RADIO":
+//       return {
+//         kind: kind,
+//         id: Number(new Date()),
+//         label: label,
+//         options: [],
+//         value: "",
+//       };
+//   }
+// }
 
 export function reducer(state: formData, action: formActions): formData {
   switch (action.type) {
@@ -129,20 +125,9 @@ export function reducer(state: formData, action: formActions): formData {
         description: action.description,
       };
     case "add_field":
-      addFieldCall(state.id, {
-        label: action.label,
-        kind: action.kind,
-        options: [],
-        meta: {
-          description: {
-            fieldType: "text",
-          },
-        },
-      }).then((data) => console.log(data));
-      const newField = getNewField(action.kind, action.label);
       return {
         ...state,
-        formFields: [...state.formFields, newField],
+        formFields: [...state.formFields, action.newField],
       };
     case "remove_field":
       deleteFieldCall(state.id, action.id);
