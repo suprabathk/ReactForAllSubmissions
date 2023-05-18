@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { formData } from "../types/formTypes";
+import { formData, formField } from "../types/formTypes";
 import { NextIcon, PrevIcon, TickIcon } from "../AppIcons";
 import { Link } from "raviger";
 import { fetchFormData, fetchFormFields } from "../utils/apiUtils";
@@ -71,10 +71,19 @@ const getFormData = (
   setCurrentFormDataCB: (formData: formData) => void
 ) => {
   fetchFormFields(formID).then((fields) => {
+    let validatedFields = fields.results.filter(
+      (field: formField) =>
+        field.label !== "" &&
+        (field.kind === "DROPDOWN" ||
+        field.kind === "GENERIC" ||
+        field.kind === "RADIO"
+          ? field.options.length !== 0
+          : true)
+    );
     fetchFormData(formID).then((data) => {
       setCurrentFormDataCB({
         ...data,
-        formFields: fields.results,
+        formFields: validatedFields,
       });
     });
   });
