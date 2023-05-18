@@ -14,13 +14,19 @@ export default function ShareForm(props: { formID: number }) {
   };
 
   return (
-    <div className="flex justify-between px-2 py-1 bg-green-200 border border-green-700 rounded-md text-green-700 mt-2">
+    <div
+      className={`transition-all flex justify-between px-2 py-1  border  rounded-md  mt-2 ${
+        copied
+          ? "bg-green-200 border-green-700 text-green-700"
+          : "bg-gray-100 border-gray-600 text-gray-700"
+      }`}
+    >
       <label>Get Shareable Link</label>
       <CopyToClipboard
-        text={`localhost:3000/form/${props.formID}`}
+        text={`localhost:3000/preview/${props.formID}`}
         onCopy={onCopy}
       >
-        <button className="flex gap-2 items-center">
+        <button className="flex gap-2 items-center text-green-700">
           <ClipboardIcon className={"w-4 h-4"} />
           {copied ? "Copied!" : "Copy"}
         </button>

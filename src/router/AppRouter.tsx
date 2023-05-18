@@ -16,8 +16,7 @@ export default function AppRouter({ currentUser }: { currentUser: User }) {
     "/about": () => (loggedIn ? <About /> : <Redirect to="/login" />),
     "/form/:id": ({ id }: { id: string }) =>
       loggedIn ? <Form id={Number(id)} /> : <Redirect to="/login" />,
-    "/preview/:id": ({ id }: { id: string }) =>
-      loggedIn ? <PreviewForm id={Number(id)} /> : <Redirect to="/login" />,
+    "/preview/:id": ({ id }: { id: string }) => <PreviewForm id={Number(id)} />,
   };
   let routeResult = useRoutes(routes) || <Page404 />;
   return <AppContainer currentUser={currentUser}>{routeResult}</AppContainer>;
