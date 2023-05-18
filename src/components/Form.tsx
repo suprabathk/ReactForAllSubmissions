@@ -16,6 +16,7 @@ import {
   Droppable,
 } from "react-beautiful-dnd";
 import { FieldsBuilder } from "../formBuilderFields/FieldsBuilder";
+import ShareForm from "../customComponents/ShareForm";
 
 const fetchForm = (formID: number, dispatch: React.Dispatch<formActions>) => {
   fetchFormData(formID).then((data) => {
@@ -139,6 +140,7 @@ export default function Form(props: { id: number }) {
             className="rounded-none border block flex-1 min-w-0 w-full text-sm p-2.5 rounded-b-md bg-gray-100 border-gray-600 placeholder-gray-400 text-gray-700 focus:ring-purple-500 focus:border-purple-500"
           />
         </div>
+        <ShareForm formID={fieldState.id} />
       </div>
       <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
         <Droppable droppableId="column">
