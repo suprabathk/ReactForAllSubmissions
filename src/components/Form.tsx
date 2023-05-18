@@ -1,17 +1,21 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { PlusIcon } from "../AppIcons";
-import { TextField } from "../formBuilderFields/TextField";
 import { formField } from "../types/formTypes";
 import { Link, navigate } from "raviger";
-import { RadioButtonField } from "../formBuilderFields/RadioButtonField";
-import { DropdownField } from "../formBuilderFields/DropdownField";
-import { MultiSelectField } from "../formBuilderFields/MultiSelectField";
 import { formActions, reducer } from "../reducers/formReducers";
 import {
   addFieldCall,
   fetchFormData,
   fetchFormFields,
+  updateFields,
 } from "../utils/apiUtils";
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+} from "react-beautiful-dnd";
+import { FieldsBuilder } from "../formBuilderFields/FieldsBuilder";
 
 const fetchForm = (formID: number, dispatch: React.Dispatch<formActions>) => {
   fetchFormData(formID).then((data) => {
@@ -64,6 +68,30 @@ export default function Form(props: { id: number }) {
     );
   };
 
+  const handleDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (!destination) {
+      return;
+    }
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+    let _formFields = fieldState.formFields;
+    _formFields.splice(
+      destination.index,
+      0,
+      _formFields.splice(source.index, 1)[0]
+    );
+    dispatch({
+      type: "set_fields",
+      fields: _formFields,
+    });
+    updateFields(fieldState.id, _formFields);
+  };
+
   useEffect(() => {
     fieldState.id !== props.id && navigate(`/form/${fieldState.id}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,184 +140,53 @@ export default function Form(props: { id: number }) {
           />
         </div>
       </div>
-
-      {fieldState.formFields && (
-        <div>
-          {fieldState.formFields.length > 0 ? (
-            <div className="flex flex-col">
-              {
-                // eslint-disable-next-line array-callback-return
-                fieldState.formFields.map((field) => {
-                  switch (field.kind) {
-                    case "TEXT":
-                      return (
-                        <div className="my-1" key={field.id}>
-                          <h3 className="text-md font-semibold">Text Field</h3>
-                          {field.label === "" && (
-                            <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
-                              Label cannot be empty.
-                            </div>
-                          )}
-                          <TextField
-                            key={field.id}
-                            id={field.id}
-                            label={field.label}
-                            fieldType={field.meta.description.fieldType}
-                            value={field.value}
-                            placeholder="Enter label for Text Field"
-                            updateLabelCB={(id, label) => {
-                              dispatch({
-                                type: "update_label",
-                                id: id,
-                                label: label,
-                              });
-                            }}
-                            updateTextTypeCB={(id, fieldType) => {
-                              dispatch({
-                                type: "update_text_type",
-                                id: id,
-                                fieldType: fieldType,
-                              });
-                            }}
-                            removeFieldCB={(id) =>
-                              dispatch({
-                                type: "remove_field",
-                                id: id,
-                              })
-                            }
-                          />
-                        </div>
-                      );
-                    case "DROPDOWN":
-                      return (
-                        <div className="my-1" key={field.id}>
-                          <h3 className="text-md font-semibold">Dropdown</h3>
-                          {field.label === "" && (
-                            <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
-                              Label cannot be empty.
-                            </div>
-                          )}
-                          <DropdownField
-                            id={field.id}
-                            label={field.label}
-                            placeholder="Enter label for Dropdown"
-                            value={field.value}
-                            options={field.options}
-                            updateOptionsCB={(id, options) => {
-                              dispatch({
-                                type: "update_options",
-                                id: id,
-                                options: options,
-                              });
-                            }}
-                            updateLabelCB={(id, label) => {
-                              dispatch({
-                                type: "update_label",
-                                id: id,
-                                label: label,
-                              });
-                            }}
-                            removeFieldCB={(id) =>
-                              dispatch({
-                                type: "remove_field",
-                                id: id,
-                              })
-                            }
-                          />
-                        </div>
-                      );
-                    case "GENERIC":
-                      return (
-                        <div className="my-1" key={field.id}>
-                          <h3 className="text-md font-semibold">Multiselect</h3>
-                          {field.label === "" && (
-                            <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
-                              Label cannot be empty.
-                            </div>
-                          )}
-                          <MultiSelectField
-                            id={field.id}
-                            label={field.label}
-                            placeholder="Enter label for Dropdown"
-                            value={field.value}
-                            options={field.options}
-                            updateOptionsCB={(id, options) => {
-                              dispatch({
-                                type: "update_options",
-                                id: id,
-                                options: options,
-                              });
-                            }}
-                            updateLabelCB={(id, label) => {
-                              dispatch({
-                                type: "update_label",
-                                id: id,
-                                label: label,
-                              });
-                            }}
-                            removeFieldCB={(id) =>
-                              dispatch({
-                                type: "remove_field",
-                                id: id,
-                              })
-                            }
-                          />
-                        </div>
-                      );
-                    case "RADIO":
-                      return (
-                        <div className="my-1" key={field.id}>
-                          <h3 className="text-md font-semibold">
-                            Radio button
-                          </h3>
-                          {field.label === "" && (
-                            <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
-                              Label cannot be empty.
-                            </div>
-                          )}
-                          <RadioButtonField
-                            id={field.id}
-                            label={field.label}
-                            placeholder="Enter label for Radio button"
-                            value={field.value}
-                            options={field.options}
-                            updateOptionsCB={(id, options) => {
-                              dispatch({
-                                type: "update_options",
-                                id: id,
-                                options: options,
-                              });
-                            }}
-                            updateLabelCB={(id, label) => {
-                              dispatch({
-                                type: "update_label",
-                                id: id,
-                                label: label,
-                              });
-                            }}
-                            removeFieldCB={(id) =>
-                              dispatch({
-                                type: "remove_field",
-                                id: id,
-                              })
-                            }
-                          />
-                        </div>
-                      );
-                  }
-                })
-              }
-            </div>
-          ) : (
-            <div>
-              <h4 className="font-semibold text-xl my-1">
-                There are no fields currently
-              </h4>
-              <p>You can start adding fields below</p>
-            </div>
-          )}
-        </div>
-      )}
+      <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
+        <Droppable droppableId="column">
+          {(provided) =>
+            fieldState.formFields && (
+              <div>
+                <div ref={provided.innerRef}>
+                  {fieldState.formFields.length > 0 ? (
+                    <div className="flex flex-col">
+                      {
+                        // eslint-disable-next-line array-callback-return
+                        fieldState.formFields.map((field, index) => (
+                          <Draggable
+                            draggableId={`${index}`}
+                            index={index}
+                            key={index}
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <FieldsBuilder
+                                  field={field}
+                                  dispatch={dispatch}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))
+                      }
+                    </div>
+                  ) : (
+                    <div>
+                      <h4 className="font-semibold text-xl my-1">
+                        There are no fields currently
+                      </h4>
+                      <p>You can start adding fields below</p>
+                    </div>
+                  )}
+                </div>
+                {provided.placeholder}
+              </div>
+            )
+          }
+        </Droppable>
+      </DragDropContext>
       <div className="w-full pt-2">
         <label
           htmlFor="add-field"
