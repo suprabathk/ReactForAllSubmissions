@@ -1,4 +1,10 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { PlusIcon } from "../AppIcons";
 import { formField } from "../types/formTypes";
 import { Link, navigate } from "raviger";
@@ -45,6 +51,37 @@ export default function Form(props: { id: number }) {
   const [newKind, setNewKind] = useState<formField["kind"]>("TEXT");
   const [error, setError] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
+
+  const handleKeyPress = useCallback((event: any) => {
+    if (event.shiftKey === true) {
+      if (event.key === "H") {
+        navigate("/");
+      }
+      if (event.key === "A") {
+        navigate("/about");
+      }
+      if (event.key === "L") {
+        localStorage.removeItem("token");
+        window.location.reload();
+      }
+      if (event.key === "N") {
+        document.getElementById("add-field")?.focus();
+        setNewLabel("");
+      }
+    }
+    if (event.key === "Escape") {
+      navigate("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    document.addEventListener("keyup", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+      document.removeEventListener("keyup", handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   const addFormField = (
     formID: number,
@@ -189,7 +226,7 @@ export default function Form(props: { id: number }) {
           }
         </Droppable>
       </DragDropContext>
-      <div className="w-full pt-2">
+      <form className="w-full pt-2">
         <label
           htmlFor="add-field"
           className="block mb-1 text-sm font-medium text-gray-700 w-full"
@@ -231,7 +268,9 @@ export default function Form(props: { id: number }) {
             placeholder="Field name"
           />
           <button
-            onClick={(_) => {
+            type="submit"
+            onClick={(event) => {
+              event.preventDefault();
               if (newLabel === "") {
                 return setError("Label cannot be empty");
               }
@@ -246,7 +285,7 @@ export default function Form(props: { id: number }) {
             <span className="ml-2 font-semibold">Add field</span>
           </button>
         </div>
-      </div>
+      </form>
       <div className="flex gap-4 mt-2">
         <Link
           href="/"

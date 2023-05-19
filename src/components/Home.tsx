@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   DeleteIcon,
   LeftIcon,
@@ -7,7 +7,7 @@ import {
   RightIcon,
   SearchIcon,
 } from "../AppIcons";
-import { Link, useQueryParams } from "raviger";
+import { Link, navigate, useQueryParams } from "raviger";
 import { formData } from "../types/formTypes";
 import Modal from "./common/Modal";
 import CreateForm from "./CreateForm";
@@ -35,6 +35,60 @@ export default function Home() {
   const [offset, setOffset] = useState(0);
   const [count, setCount] = useState(0);
   const limit = 2;
+
+  const handleKeyPress = useCallback(
+    (event: any) => {
+      if (event.shiftKey === true) {
+        if (event.key === "A") {
+          navigate("/about");
+        }
+        if (event.key === "L") {
+          localStorage.removeItem("token");
+          window.location.reload();
+        }
+        if (event.key === "S") {
+          setSearchString("");
+          document.getElementById("search")?.focus();
+        }
+        if (event.key === "C") {
+          setNewForm(true);
+        }
+        if (event.key === "N") {
+          setOffset((offset) => {
+            return offset + limit < count ? offset + limit : offset;
+          });
+        }
+        if (event.key === "P") {
+          setOffset((offset) => {
+            return offset - limit >= 0 ? offset - limit : offset;
+          });
+        }
+        if (event.key === `!`) {
+          formData[offset] && navigate(`/preview/${formData[offset].id}`);
+        }
+        if (event.key === `@`) {
+          formData[offset + 1] &&
+            navigate(`/preview/${formData[offset + 1].id}`);
+        }
+      }
+      if (event.key === `1`) {
+        formData[offset] && navigate(`/form/${formData[offset].id}`);
+      }
+      if (event.key === `2`) {
+        formData[offset + 1] && navigate(`/form/${formData[offset + 1].id}`);
+      }
+    },
+    [count, formData, offset]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    document.addEventListener("keyup", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+      document.removeEventListener("keyup", handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   const deleteLocalForm = (id: number) => {
     deleteForm(id);

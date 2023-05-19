@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { formData, formField } from "../types/formTypes";
 import { NextIcon, PrevIcon, TickIcon } from "../AppIcons";
-import { Link } from "raviger";
+import { Link, navigate } from "raviger";
 import { fetchFormData, fetchFormFields } from "../utils/apiUtils";
 import { PreviewQuestion } from "./PreviewQuestion";
 
@@ -16,6 +16,26 @@ export function NextPrevAndSubmitButton({
   onNext: () => void;
   onPrev: () => void;
 }) {
+  const handleKeyPress = useCallback(
+    (event: any) => {
+      if (event.keyCode === 39) onNext();
+      if (event.keyCode === 37) {
+        if (isFirstQuestion) {
+          navigate("/");
+        } else {
+          onPrev();
+        }
+      }
+    },
+    [isFirstQuestion, onNext, onPrev]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
   return (
     <div className="flex gap-2">
       {isFirstQuestion && (
