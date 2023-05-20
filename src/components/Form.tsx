@@ -13,7 +13,6 @@ import {
   addFieldCall,
   fetchFormData,
   fetchFormFields,
-  updateFields,
 } from "../utils/apiUtils";
 import {
   DragDropContext,
@@ -127,7 +126,6 @@ export default function Form(props: { id: number }) {
       type: "set_fields",
       fields: _formFields,
     });
-    updateFields(fieldState.id, _formFields);
   };
 
   useEffect(() => {
