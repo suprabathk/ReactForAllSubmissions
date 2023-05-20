@@ -37,7 +37,7 @@ export default function Home() {
   const limit = 2;
 
   const handleKeyPress = useCallback(
-    (event: any) => {
+    (event: KeyboardEvent) => {
       if (event.shiftKey === true) {
         if (event.key === "A") {
           navigate("/about");

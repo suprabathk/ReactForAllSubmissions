@@ -51,7 +51,7 @@ export default function Form(props: { id: number }) {
   const [error, setError] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
 
-  const handleKeyPress = useCallback((event: any) => {
+  const handleKeyPress = useCallback((event: KeyboardEvent) => {
     if (event.shiftKey === true) {
       if (event.key === "H") {
         navigate("/");

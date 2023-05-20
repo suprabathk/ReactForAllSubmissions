@@ -17,7 +17,7 @@ export function NextPrevAndSubmitButton({
   onPrev: () => void;
 }) {
   const handleKeyPress = useCallback(
-    (event: any) => {
+    (event: KeyboardEvent) => {
       if (event.keyCode === 39) onNext();
       if (event.keyCode === 37) {
         if (isFirstQuestion) {
