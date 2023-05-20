@@ -12,7 +12,11 @@ const getCurrentUser = async (setCurrentUser: (currentUser: User) => void) => {
 };
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<User>({
+    username: "",
+    url: "",
+    name: "",
+  });
   useEffect(() => {
     getCurrentUser(setCurrentUser);
   }, []);
