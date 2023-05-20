@@ -12,7 +12,7 @@ export default function AppRouter({ currentUser }: { currentUser: User }) {
   const loggedIn = currentUser?.username.length > 0;
   const routes = {
     "/": () => (loggedIn ? <Home /> : <Redirect to="/login" />),
-    "/login": () => <Login />,
+    "/login": () => (loggedIn ? <Redirect to="/" /> : <Login />),
     "/about": () => (loggedIn ? <About /> : <Redirect to="/login" />),
     "/form/:id": ({ id }: { id: string }) =>
       loggedIn ? <Form id={Number(id)} /> : <Redirect to="/login" />,
