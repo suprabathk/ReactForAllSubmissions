@@ -5,6 +5,7 @@ import { MultiSelectField } from "./MultiSelectField";
 import { RadioButtonField } from "./RadioButtonField";
 import { TextField } from "./TextField";
 import { formActions } from "../reducers/formReducers";
+import { UpAndDownIcon } from "../AppIcons";
 
 export function FieldsBuilder({
   field,
@@ -20,7 +21,10 @@ export function FieldsBuilder({
           case "TEXT":
             return (
               <div className="my-1" key={field.id}>
-                <h3 className="text-md font-semibold">Text Field</h3>
+                <div className="flex gap-2 items-center group">
+                  <UpAndDownIcon className="w-4 h-4 hidden group-hover:block" />
+                  <h3 className="text-md font-semibold">Text Field</h3>
+                </div>
                 {field.label === "" && (
                   <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
                     Label cannot be empty.
@@ -59,7 +63,10 @@ export function FieldsBuilder({
           case "DROPDOWN":
             return (
               <div className="my-1" key={field.id}>
-                <h3 className="text-md font-semibold">Dropdown</h3>
+                <div className="flex gap-2 items-center group">
+                  <UpAndDownIcon className="w-4 h-4 hidden group-hover:block" />
+                  <h3 className="text-md font-semibold">Dropdown</h3>
+                </div>
                 {field.label === "" && (
                   <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
                     Label cannot be empty.
@@ -97,7 +104,10 @@ export function FieldsBuilder({
           case "GENERIC":
             return (
               <div className="my-1" key={field.id}>
-                <h3 className="text-md font-semibold">Multiselect</h3>
+                <div className="flex gap-2 items-center group">
+                  <UpAndDownIcon className="w-4 h-4 hidden group-hover:block" />
+                  <h3 className="text-md font-semibold">Multiselect</h3>
+                </div>
                 {field.label === "" && (
                   <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
                     Label cannot be empty.
@@ -135,7 +145,10 @@ export function FieldsBuilder({
           case "RADIO":
             return (
               <div className="my-1" key={field.id}>
-                <h3 className="text-md font-semibold">Radio button</h3>
+                <div className="flex gap-2 items-center group">
+                  <UpAndDownIcon className="w-4 h-4 hidden group-hover:block" />
+                  <h3 className="text-md font-semibold">Radio button</h3>
+                </div>
                 {field.label === "" && (
                   <div className="bg-red-200 my-2 border border-red-600 px-2 rounded-md text-red-600">
                     Label cannot be empty.

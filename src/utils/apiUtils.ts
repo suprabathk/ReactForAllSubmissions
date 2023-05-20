@@ -120,7 +120,3 @@ export const submitAnswer = (
 ) => {
   return request(`forms/${formID}/submission/`, "POST", answers);
 };
-
-export const updateFields = (formID: number, fields: formField[]) => {
-  return request(`forms/${formID}/fields/`, "PATCH", fields);
-};
