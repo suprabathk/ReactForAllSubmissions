@@ -9,14 +9,14 @@ type RequestMethod = "GET" | "POST" | "PATCH" | "DELETE" | "PUT";
 export const request = async (
   endpoint: string,
   method: RequestMethod = "GET",
-  data: Record<string, unknown> = {}
+  data: object = {}
 ) => {
   let url: string;
   let payload: string;
   if (method === "GET") {
     const requestParams = data
-      ? `?${Object.keys(data)
-          .map((key) => `${key}=${data[key]}`)
+      ? `?${Object.entries(data)
+          .map((key, value) => `${key}=${value}`)
           .join("&")}`
       : "";
     url = `${API_BASE_URL}${endpoint}${requestParams}`;
