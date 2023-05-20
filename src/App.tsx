@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import AppRouter from "./router/AppRouter";
 import { me } from "./utils/apiUtils";
 import { User } from "./types/userTypes";
+import SessionRouter from "./router/SessionRouter";
+import AppContainer from "./AppContainer";
 
 const getCurrentUser = async (setCurrentUser: (currentUser: User) => void) => {
   const currentUser = await me();
@@ -13,7 +15,7 @@ const getCurrentUser = async (setCurrentUser: (currentUser: User) => void) => {
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User>({
-    username: "",
+    username: null,
     url: "",
     name: "",
   });
@@ -21,7 +23,15 @@ function App() {
     getCurrentUser(setCurrentUser);
   }, []);
 
-  return <AppRouter currentUser={currentUser} />;
+  return (
+    <AppContainer currentUser={currentUser}>
+      {currentUser.username && currentUser.username?.length > 0 ? (
+        <AppRouter />
+      ) : (
+        <SessionRouter />
+      )}
+    </AppContainer>
+  );
 }
 
 export default App;

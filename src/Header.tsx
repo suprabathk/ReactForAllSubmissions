@@ -15,7 +15,8 @@ export default function Header(props: { currentUser: User }) {
         {[
           { page: "Home", url: "/" },
           { page: "About", url: "/about" },
-          ...(props.currentUser?.username.length > 0
+          ...(props.currentUser.username &&
+          props.currentUser?.username.length > 0
             ? [
                 {
                   page: "Logout",
