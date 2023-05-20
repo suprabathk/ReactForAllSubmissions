@@ -1,5 +1,5 @@
 import { navigate } from "raviger";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { login } from "../utils/apiUtils";
 
 export default function Login() {
@@ -18,12 +18,12 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     navigate("/");
+  //   }
+  // }, []);
 
   return (
     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">

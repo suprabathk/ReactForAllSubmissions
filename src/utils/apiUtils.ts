@@ -9,7 +9,7 @@ type RequestMethod = "GET" | "POST" | "PATCH" | "DELETE" | "PUT";
 export const request = async (
   endpoint: string,
   method: RequestMethod = "GET",
-  data: any = {}
+  data: Record<string, unknown> = {}
 ) => {
   let url: string;
   let payload: string;

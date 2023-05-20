@@ -1,1 +1,5 @@
-export type User = any;
+export type User = {
+  name: string;
+  username: string | null;
+  url: string;
+};
