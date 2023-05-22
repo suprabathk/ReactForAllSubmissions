@@ -37,8 +37,8 @@ export default function Home() {
   const limit = 2;
 
   const deleteLocalForm = (id: number) => {
-    deleteForm(id);
     setFormData((formData) => formData.filter((form) => form.id !== id));
+    deleteForm(id).then(() => fetchForms(setFormData, setCount, offset, limit));
   };
 
   useEffect(() => fetchForms(setFormData, setCount, offset, limit), [offset]);
