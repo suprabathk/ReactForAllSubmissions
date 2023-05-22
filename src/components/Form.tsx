@@ -90,11 +90,16 @@ export default function Form(props: { id: number }) {
     addFieldCall(formID, {
       label: label,
       kind: kind,
-      meta: {
-        description: {
-          fieldType: "text",
+      ...(kind === "TEXT" && {
+        meta: {
+          description: {
+            fieldType: "text",
+          },
         },
-      },
+      }),
+      ...((kind === "DROPDOWN" || kind === "GENERIC" || kind === "RADIO") && {
+        options: [],
+      }),
     }).then((data) =>
       dispatch({
         type: "add_field",

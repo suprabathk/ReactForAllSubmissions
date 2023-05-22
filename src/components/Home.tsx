@@ -91,8 +91,8 @@ export default function Home() {
   }, [handleKeyPress]);
 
   const deleteLocalForm = (id: number) => {
-    deleteForm(id);
     setFormData((formData) => formData.filter((form) => form.id !== id));
+    deleteForm(id).then(() => fetchForms(setFormData, setCount, offset, limit));
   };
 
   useEffect(() => fetchForms(setFormData, setCount, offset, limit), [offset]);
