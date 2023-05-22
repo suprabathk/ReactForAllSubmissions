@@ -38,18 +38,20 @@ export function FieldsBuilder({
                   value={field.value}
                   placeholder="Enter label for Text Field"
                   updateLabelCB={(id, label) => {
-                    dispatch({
-                      type: "update_label",
-                      id: id,
-                      label: label,
-                    });
+                    if (label !== field.label)
+                      dispatch({
+                        type: "update_label",
+                        id: id,
+                        label: label,
+                      });
                   }}
                   updateTextTypeCB={(id, fieldType) => {
-                    dispatch({
-                      type: "update_text_type",
-                      id: id,
-                      fieldType: fieldType,
-                    });
+                    if (fieldType !== field.meta.description.fieldType)
+                      dispatch({
+                        type: "update_text_type",
+                        id: id,
+                        fieldType: fieldType,
+                      });
                   }}
                   removeFieldCB={(id) =>
                     dispatch({
@@ -79,18 +81,20 @@ export function FieldsBuilder({
                   value={field.value}
                   options={field.options}
                   updateOptionsCB={(id, options) => {
-                    dispatch({
-                      type: "update_options",
-                      id: id,
-                      options: options,
-                    });
+                    if (options !== field.options)
+                      dispatch({
+                        type: "update_options",
+                        id: id,
+                        options: options,
+                      });
                   }}
                   updateLabelCB={(id, label) => {
-                    dispatch({
-                      type: "update_label",
-                      id: id,
-                      label: label,
-                    });
+                    if (label !== field.label)
+                      dispatch({
+                        type: "update_label",
+                        id: id,
+                        label: label,
+                      });
                   }}
                   removeFieldCB={(id) =>
                     dispatch({
@@ -120,18 +124,20 @@ export function FieldsBuilder({
                   value={field.value}
                   options={field.options}
                   updateOptionsCB={(id, options) => {
-                    dispatch({
-                      type: "update_options",
-                      id: id,
-                      options: options,
-                    });
+                    if (options !== field.options)
+                      dispatch({
+                        type: "update_options",
+                        id: id,
+                        options: options,
+                      });
                   }}
                   updateLabelCB={(id, label) => {
-                    dispatch({
-                      type: "update_label",
-                      id: id,
-                      label: label,
-                    });
+                    if (label !== field.label)
+                      dispatch({
+                        type: "update_label",
+                        id: id,
+                        label: label,
+                      });
                   }}
                   removeFieldCB={(id) =>
                     dispatch({
@@ -161,18 +167,20 @@ export function FieldsBuilder({
                   value={field.value}
                   options={field.options}
                   updateOptionsCB={(id, options) => {
-                    dispatch({
-                      type: "update_options",
-                      id: id,
-                      options: options,
-                    });
+                    if (options !== field.options)
+                      dispatch({
+                        type: "update_options",
+                        id: id,
+                        options: options,
+                      });
                   }}
                   updateLabelCB={(id, label) => {
-                    dispatch({
-                      type: "update_label",
-                      id: id,
-                      label: label,
-                    });
+                    if (label !== field.label)
+                      dispatch({
+                        type: "update_label",
+                        id: id,
+                        label: label,
+                      });
                   }}
                   removeFieldCB={(id) =>
                     dispatch({
