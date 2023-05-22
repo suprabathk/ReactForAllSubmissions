@@ -32,13 +32,14 @@ export function PreviewQuestion({
     currentQuestion.index === currentFormData.formFields.length;
 
   const getIndexQuestion = (index: number) => currentFormData.formFields[index];
+  const [error, setError] = useState("");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (isSubmitted) {
-      submitAnswer(currentFormData.id, { answers: answers }).then((data) =>
-        console.log(data)
-      );
+      submitAnswer(currentFormData.id, {
+        answers: answers,
+      }).then((data) => console.log(data));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers]);
@@ -57,17 +58,22 @@ export function PreviewQuestion({
   }, [currentQuestion]);
 
   const nextQuestionCB = (questionID: number, ans: string) => {
-    dispatchAnswer({
-      type: "add_answer",
-      questionID: questionID,
-      ans: ans,
-    });
-    setCurrentAnswer("");
-    dispatchQuestion({
-      type: "update_question",
-      getIndexQuestionCB: getIndexQuestion,
-      kind: "next",
-    });
+    if (ans) {
+      setError("");
+      dispatchAnswer({
+        type: "add_answer",
+        questionID: questionID,
+        ans: ans,
+      });
+      setCurrentAnswer("");
+      dispatchQuestion({
+        type: "update_question",
+        getIndexQuestionCB: getIndexQuestion,
+        kind: "next",
+      });
+    } else {
+      setError("Please enter your answer");
+    }
   };
 
   const prevQuestionCB = () => {
@@ -98,6 +104,11 @@ export function PreviewQuestion({
               >
                 {currentQuestion.currentQuestion.label}
               </label>
+              {error && (
+                <div className="bg-red-200 border border-red-600 px-2 rounded-md text-red-600">
+                  {error}
+                </div>
+              )}
               <div className="flex flex-col gap-2 mt-2">
                 {currentQuestion.currentQuestion.kind === "TEXT" &&
                   (currentQuestion.currentQuestion.meta.description
