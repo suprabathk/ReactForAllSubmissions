@@ -140,7 +140,7 @@ export default function Form(props: { id: number }) {
 
   useEffect(() => {
     fetchForm(props.id, dispatch);
-    titleRef.current?.focus();
+    // titleRef.current?.focus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
