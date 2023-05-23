@@ -16,7 +16,7 @@ export const request = async (
   if (method === "GET") {
     const requestParams = data
       ? `?${Object.entries(data)
-          .map((key, value) => `${key}=${value}`)
+          .map((entry) => `${entry[0]}=${entry[1]}`)
           .join("&")}`
       : "";
     url = `${API_BASE_URL}${endpoint}${requestParams}`;
@@ -92,14 +92,14 @@ export const deleteFieldCall = (formID: number, fieldID: number) => {
 };
 
 export const deleteForm = (formID: number) => {
-  return request(`forms/${formID}`, "DELETE");
+  return request(`forms/${formID}/`, "DELETE");
 };
 
 export const updateForm = (
   formID: number,
   formParam: { title?: string; description?: string }
 ) => {
-  return request(`forms/${formID}`, "PATCH", formParam);
+  return request(`forms/${formID}/`, "PATCH", formParam);
 };
 
 export const updateField = (
@@ -111,7 +111,7 @@ export const updateField = (
     meta?: { description: { fieldType: textFieldTypes } };
   }
 ) => {
-  return request(`forms/${formID}/fields/${fieldID}`, "PATCH", fieldParam);
+  return request(`forms/${formID}/fields/${fieldID}/`, "PATCH", fieldParam);
 };
 
 export const submitAnswer = (
