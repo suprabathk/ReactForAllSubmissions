@@ -72,10 +72,10 @@ export default function Home() {
         }
       }
       if (event.key === `1`) {
-        formData[offset] && navigate(`/form/${formData[offset].id}`);
+        formData[0] && navigate(`/form/${formData[0].id}`);
       }
       if (event.key === `2`) {
-        formData[offset + 1] && navigate(`/form/${formData[offset + 1].id}`);
+        formData[1] && navigate(`/form/${formData[1].id}`);
       }
     },
     [count, formData, offset]
